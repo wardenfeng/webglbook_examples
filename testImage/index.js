@@ -23,11 +23,12 @@ var FSHADER_SOURCE =
 var gl;
 var u_Sampler;
 var n;
+var canvas;
 
 function main()
 {
   // Retrieve <canvas> element
-  var canvas = document.getElementById('webgl');
+  canvas = document.getElementById('webgl');
 
   // Get the rendering context for WebGL
   gl = getWebGLContext(canvas);
@@ -195,15 +196,23 @@ var images = [];
 var textures = [];
 var urls = [
   '../resources/sky.jpg',
+  '../resources/sky.jpg',
+  '../resources/sky.jpg',
+  '../resources/sky.jpg',
+  '../resources/sky.jpg',
+  '../resources/sky.jpg',
 ];
 
 function update()
 {
-
   gl.clear(gl.COLOR_BUFFER_BIT);   // Clear <canvas>
 
-  textures.forEach(texture =>
+  var length = textures.length;
+  length = Math.ceil(Math.sqrt(length));
+  textures.forEach((texture, index) =>
   {
+    gl.viewport(Math.floor(index / length) / length * canvas.width, (index % length) / length * canvas.height, canvas.width / length, canvas.height / length);
+
     draw(gl, n, texture, u_Sampler);
   });
 
