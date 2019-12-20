@@ -146,7 +146,7 @@ function loadImages(urls, callback, images)
   var url = urls.pop();
   loadImage(url, (image) =>
   {
-    document.body.appendChild(image);
+    // document.body.appendChild(image);
     images.push(image);
     loadImages(urls, callback, images);
   });
