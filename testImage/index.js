@@ -48,15 +48,30 @@ function main()
     return;
   }
 
+  // Get the storage location of u_Sampler
+  var u_Sampler = gl.getUniformLocation(gl.program, 'u_Sampler');
+  if (!u_Sampler)
+  {
+    console.log('Failed to get the storage location of u_Sampler');
+    return false;
+  }
+
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
-  // Set texture
-  if (!initTextures(gl, n))
+  loadImage('../resources/sky.jpg', (image) =>
   {
-    console.log('Failed to intialize the texture.');
-    return;
-  }
+    var texture = loadTexture1(gl, image);
+
+    draw(gl, n, texture, u_Sampler);
+  });
+
+  // // Set texture
+  // if (!initTextures(gl, n))
+  // {
+  //   console.log('Failed to intialize the texture.');
+  //   return;
+  // }
 }
 
 function initVertexBuffers(gl)
