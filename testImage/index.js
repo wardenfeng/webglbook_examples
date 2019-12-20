@@ -64,12 +64,6 @@ function main()
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
-  loadImage(urls[0], (img) =>
-  {
-    images.push(img);
-    textures.push(loadTexture(gl, img));
-  });
-
   loadImages(urls, (imgs) =>
   {
     images = imgs;
@@ -138,7 +132,7 @@ function loadImage(url, callback)
   // Register the event handler to be called on loading an image
   image.onload = function () { callback(image); };
   // Tell the browser to load an image
-  image.src = '../resources/sky.jpg';
+  image.src = url;
 }
 
 function loadImages(urls, callback, images)
@@ -152,6 +146,7 @@ function loadImages(urls, callback, images)
   var url = urls.pop();
   loadImage(url, (image) =>
   {
+    document.body.appendChild(image);
     images.push(image);
     loadImages(urls, callback, images);
   });
@@ -195,12 +190,22 @@ function draw(gl, n, texture, u_Sampler)
 var images = [];
 var textures = [];
 var urls = [
-  '../resources/sky.jpg',
-  '../resources/sky.jpg',
-  '../resources/sky.jpg',
-  '../resources/sky.jpg',
-  '../resources/sky.jpg',
-  '../resources/sky.jpg',
+
+  '../resources/7herbs.JPG',
+  '../resources/blueflower.JPG',
+  '../resources/blueflower2.JPG',
+  '../resources/circle.gif',
+  '../resources/lightblueflower.JPG',
+  '../resources/numbers.png',
+  '../resources/orange.JPG',
+  '../resources/parasol.jpg',
+  '../resources/particle.png',
+  '../resources/pinkflower.JPG',
+  '../resources/redflower.jpg',
+  '../resources/sky_cloud.jpg',
+  '../resources/sky_roof.JPG',
+  '../resources/sky.JPG',
+  '../resources/yellowflower.jpg',
 ];
 
 function update()
