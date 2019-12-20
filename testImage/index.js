@@ -64,12 +64,6 @@ function main()
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
-  loadImages(urls, (imgs) =>
-  {
-    images = imgs;
-    textures = images.map(img => loadTexture(gl, img));
-  });
-
   requestAnimationFrame(update)
 }
 
@@ -187,30 +181,11 @@ function draw(gl, n, texture, u_Sampler)
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, n); // Draw the rectangle
 }
 
-var images = [];
-var textures = [];
-var urls = [
-
-  '../resources/7herbs.JPG',
-  '../resources/blueflower.JPG',
-  '../resources/blueflower2.JPG',
-  '../resources/circle.gif',
-  '../resources/lightblueflower.JPG',
-  '../resources/numbers.png',
-  '../resources/orange.JPG',
-  '../resources/parasol.jpg',
-  '../resources/particle.png',
-  '../resources/pinkflower.JPG',
-  '../resources/redflower.jpg',
-  '../resources/sky_cloud.jpg',
-  '../resources/sky_roof.JPG',
-  '../resources/sky.JPG',
-  '../resources/yellowflower.jpg',
-];
-
 function update()
 {
   gl.clear(gl.COLOR_BUFFER_BIT);   // Clear <canvas>
+
+  var textures = obj.textures;
 
   var length = textures.length;
   length = Math.ceil(Math.sqrt(length));
@@ -223,3 +198,59 @@ function update()
 
   requestAnimationFrame(update)
 }
+
+var obj = {
+  images: [],
+  textures: [],
+  urls: [
+
+    'images/7herbs.JPG',
+    'images/blueflower.JPG',
+    'images/blueflower2.JPG',
+    'images/circle.gif',
+    'images/orange.JPG',
+    'images/parasol.jpg',
+    'images/particle.png',
+    'images/pinkflower.JPG',
+    'images/redflower.jpg',
+    'images/sky_cloud.jpg',
+    'images/sky_roof.JPG',
+    'images/sky.JPG',
+    'images/yellowflower.jpg',
+  ],
+
+  loadImages: function ()
+  {
+    loadImages(obj.urls.concat(), (imgs) =>
+    {
+      obj.images = imgs;
+      alert(`images is loaded! ${obj.images.length}`)
+    });
+  },
+  loadTextures: function ()
+  {
+    obj.textures = obj.images.map(img => loadTexture(gl, img));
+
+    alert(`textures is loaded! ${obj.textures.length}`)
+  },
+  clearImages: function ()
+  {
+    obj.images = [];
+    alert(`images is clean! ${obj.images.length}`)
+  },
+  clearTextures: function ()
+  {
+    obj.textures.forEach(t =>
+    {
+      gl.deleteTexture(t);
+    });
+    obj.textures = [];
+    alert(`textures is clean! ${obj.textures.length}`)
+  },
+};
+
+var gui = new dat.GUI();
+gui.add(obj, 'loadImages');
+gui.add(obj, 'loadTextures');
+gui.add(obj, 'clearImages');
+gui.add(obj, 'clearTextures');
