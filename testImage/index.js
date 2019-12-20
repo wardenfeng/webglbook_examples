@@ -63,6 +63,18 @@ function main()
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
+  loadImage(urls[0], (img) =>
+  {
+    images.push(img);
+    textures.push(loadTexture(gl, img));
+  });
+
+  loadImages(urls, (imgs) =>
+  {
+    images = imgs;
+    textures = images.map(img => loadTexture(gl, img));
+  });
+
   requestAnimationFrame(update)
 }
 
@@ -176,35 +188,24 @@ function draw(gl, n, texture, u_Sampler)
   // Set the texture unit 0 to the sampler
   gl.uniform1i(u_Sampler, 0);
 
-
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, n); // Draw the rectangle
 }
 
-var isload = false;
-var isloading = false;
-var image;
-var texture;
+var images = [];
+var textures = [];
+var urls = [
+  '../resources/sky.jpg',
+];
 
 function update()
 {
-  if (!isload)
-  {
-    if (!isloading)
-    {
-      loadImage('../resources/sky.jpg', (img) =>
-      {
-        image = img;
-        texture = loadTexture(gl, image);
-        isload = true;
-      });
-    }
-    isloading = true;
-  } else
-  {
-    gl.clear(gl.COLOR_BUFFER_BIT);   // Clear <canvas>
 
+  gl.clear(gl.COLOR_BUFFER_BIT);   // Clear <canvas>
+
+  textures.forEach(texture =>
+  {
     draw(gl, n, texture, u_Sampler);
-  }
+  });
 
   requestAnimationFrame(update)
 }
