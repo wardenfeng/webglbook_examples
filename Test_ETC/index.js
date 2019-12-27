@@ -41,6 +41,7 @@ function main()
   };
 
   alert(Object.keys(formats).filter(v => formats[v]));
+  alert(`需要使用Android平台运行示例！`);
 
   // Initialize shaders
   if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE))
@@ -135,7 +136,7 @@ function initTextures(gl, n)
 
   // 加载ETC压缩纹理
   var loader = new KTXLoader();
-  loader.load('../resources/disturb_ETC1.ktx', (ktxData) =>
+  loader.load('resources/disturb_ETC1.ktx', (ktxData) =>
   {
     loadTexture(gl, n, texture, u_Sampler, ktxData);
   });
