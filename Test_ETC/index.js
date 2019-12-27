@@ -142,11 +142,11 @@ function initTextures(gl, n)
   }
 
   // 加载ETC压缩纹理
-  var resource = 'resources/disturb_ETC1.ktx';
-  var resource = 'resources/1.ktx';
+  var url = 'resources/disturb_ETC1.ktx';
+  var url = 'resources/1.ktx';
 
   var loader = new KTXLoader();
-  loader.load(resource, (ktxData) =>
+  loader.load(url, (ktxData) =>
   {
     loadTexture(gl, n, texture, u_Sampler, ktxData);
   });
@@ -169,7 +169,6 @@ function loadTexture(gl, n, texture, u_Sampler, ktxData)
   {
     var mipmap = ktxData.mipmaps[i];
     gl.compressedTexImage2D(gl.TEXTURE_2D, i, ktxData.format, mipmap.width, mipmap.height, 0, mipmap.data);
-    // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
   }
 
   // Set the texture unit 0 to the sampler
