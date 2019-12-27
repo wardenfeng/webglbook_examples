@@ -18,10 +18,8 @@ var FSHADER_SOURCE =
   'varying vec2 v_TexCoord;\n' +
   'void main() {\n' +
   // '  gl_FragColor = texture2D(u_Sampler, v_TexCoord);\n' +
-  // '  gl_FragColor.xyz = texture2D(u_Sampler, v_TexCoord).xyz;\n' +
-  '  gl_FragColor.w = texture2D(u_Sampler, v_TexCoord).x;\n' +
-  '  gl_FragColor.xyz = vec3(1.0,1.0,1.0);\n' +
-  // '  gl_FragColor.w = 1.0;\n' +
+  '  gl_FragColor.xyz = texture2D(u_Sampler, fract(v_TexCoord) * vec2(1.0,0.5)).xyz;\n' +
+  '  gl_FragColor.w = texture2D(u_Sampler, fract(v_TexCoord) * vec2(1.0,0.5) + vec2(0.0,0.5)).x;\n' +
   '}\n';
 
 function main()
@@ -36,6 +34,11 @@ function main()
     console.log('Failed to get the rendering context for WebGL');
     return;
   }
+  gl.enable(gl.DEPTH_TEST);
+  // Enable alpha blending
+  gl.enable(gl.BLEND);
+  // Set blending function
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
   var formats = {
     astc: gl.getExtension('WEBGL_compressed_texture_astc'),
@@ -63,7 +66,7 @@ function main()
   }
 
   // Specify the color for clearing <canvas>
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  gl.clearColor(0.2, 0.2, 0.2, 1.0);
 
   // Set texture
   if (!initTextures(gl, n))
@@ -83,6 +86,11 @@ function initVertexBuffers(gl)
     0.5, -0.5, 1.0, 0.0,
   ]);
   var n = 4; // The number of vertices
+
+  for (var i = 0; i < verticesTexCoords.length; i++)
+  {
+    verticesTexCoords[i] *= 2;
+  }
 
   // Create the buffer object
   var vertexTexCoordBuffer = gl.createBuffer();
