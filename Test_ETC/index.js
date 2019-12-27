@@ -40,14 +40,9 @@ function main()
   // Set blending function
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-  var formats = {
-    astc: gl.getExtension('WEBGL_compressed_texture_astc'),
-    etc1: gl.getExtension('WEBGL_compressed_texture_etc1'),
-    s3tc: gl.getExtension('WEBGL_compressed_texture_s3tc'),
-    pvrtc: gl.getExtension('WEBGL_compressed_texture_pvrtc')
-  };
+  gl.getExtension('WEBGL_compressed_texture_etc1');
 
-  alert(Object.keys(formats).filter(v => formats[v]));
+  // alert(Object.keys(formats).filter(v => formats[v]));
   alert(`需要使用Android平台运行示例！`);
 
   // Initialize shaders
