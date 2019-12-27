@@ -142,8 +142,8 @@ function initTextures(gl, n)
   }
 
   // 加载ETC压缩纹理
-  var url = 'resources/disturb_ETC1.ktx';
-  var url = 'resources/1.ktx';
+  var url = 'resources/t_0012lvyeshu_obj_p_d.ktx';
+  var url = 'resources/orange.ktx';
 
   var loader = new KTXLoader();
   loader.load(url, (ktxData) =>
