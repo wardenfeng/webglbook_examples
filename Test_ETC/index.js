@@ -17,7 +17,11 @@ var FSHADER_SOURCE =
   'uniform sampler2D u_Sampler;\n' +
   'varying vec2 v_TexCoord;\n' +
   'void main() {\n' +
-  '  gl_FragColor = texture2D(u_Sampler, v_TexCoord);\n' +
+  // '  gl_FragColor = texture2D(u_Sampler, v_TexCoord);\n' +
+  // '  gl_FragColor.xyz = texture2D(u_Sampler, v_TexCoord).xyz;\n' +
+  '  gl_FragColor.w = texture2D(u_Sampler, v_TexCoord).x;\n' +
+  '  gl_FragColor.xyz = vec3(1.0,1.0,1.0);\n' +
+  // '  gl_FragColor.w = 1.0;\n' +
   '}\n';
 
 function main()
@@ -135,8 +139,11 @@ function initTextures(gl, n)
   }
 
   // 加载ETC压缩纹理
+  var resource = 'resources/disturb_ETC1.ktx';
+  var resource = 'resources/1.ktx';
+
   var loader = new KTXLoader();
-  loader.load('resources/disturb_ETC1.ktx', (ktxData) =>
+  loader.load(resource, (ktxData) =>
   {
     loadTexture(gl, n, texture, u_Sampler, ktxData);
   });
