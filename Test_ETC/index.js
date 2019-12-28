@@ -16,10 +16,16 @@ var FSHADER_SOURCE =
   '#endif\n' +
   'uniform sampler2D u_Sampler;\n' +
   'varying vec2 v_TexCoord;\n' +
+  `
+  vec4 texture2DEtC1(sampler2D sampler,vec2 uv)
+  {
+      return vec4( texture2D(sampler, fract(uv) * vec2(1.0,0.5)).xyz, texture2D(sampler, fract(uv) * vec2(1.0,0.5) + vec2(0.0,0.5)).x);
+      // return vec4( texture2D(sampler, uv * vec2(1.0,0.5)).xyz, texture2D(sampler, uv * vec2(1.0,0.5) + vec2(0.0,0.5)).x);
+  }
+  `+
   'void main() {\n' +
   // '  gl_FragColor = texture2D(u_Sampler, v_TexCoord);\n' +
-  '  gl_FragColor.xyz = texture2D(u_Sampler, fract(v_TexCoord) * vec2(1.0,0.5)).xyz;\n' +
-  '  gl_FragColor.w = texture2D(u_Sampler, fract(v_TexCoord) * vec2(1.0,0.5) + vec2(0.0,0.5)).x;\n' +
+  '  gl_FragColor = texture2DEtC1(u_Sampler, v_TexCoord);\n' +
   '}\n';
 
 function main()

@@ -15,6 +15,9 @@
 1. https://github.com/BabylonJS/Babylon.js/blob/master/src/Misc/khronosTextureContainer.ts
 1. https://github.com/mrdoob/three.js/blob/dev/examples/js/loaders/KTXLoader.js
 
+#### 压缩纹理
+使用 tools/Mali_Texture_Compression_Tool_v4,-d-,3,-d-,0,-d-,b81c088_Windows_x64.exe ,需要安装或者使用安装后得到的Mali Texture Compression Tool v4.3.0\bin\etcpack.exe调用命令压缩。
+
 #### 实现
 1. 示例入口 index.js、
 1. ETC压缩纹理数据的文件KTX文件加载解析
