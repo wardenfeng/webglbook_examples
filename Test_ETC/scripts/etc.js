@@ -12,7 +12,7 @@ var fun = function ()
     // execFile(exeDir + '/etcpack.exe', [input, outDir, `-s`, `fast`, `-c`, `etc1`, `-ktx`, `-aa`], { cwd: exeDir }, function (err, data)
     execFile(exePath, [input, outDir, `-s`, `fast`, `-c`, `etc1`, `-ktx`, `-aa`], { cwd: exeDir }, function (err, data)
     {
-        console.log(err)
+        console.log(`error: ` + err)
 
         console.log(data.toString());
     });
