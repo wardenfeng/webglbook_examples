@@ -1,1 +1,0 @@
-etcpack orange.JPG out -s fast -c etc1 -ktx -aa
