@@ -1,1 +1,0 @@
-cd Test_ETC/tools/mali && node etc.js
