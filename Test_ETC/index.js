@@ -19,8 +19,9 @@ var FSHADER_SOURCE =
   `
   vec4 texture2DEtC1(sampler2D sampler,vec2 uv)
   {
-      return vec4( texture2D(sampler, fract(uv) * vec2(1.0,0.5)).xyz, texture2D(sampler, fract(uv) * vec2(1.0,0.5) + vec2(0.0,0.5)).x);
-      // return vec4( texture2D(sampler, uv * vec2(1.0,0.5)).xyz, texture2D(sampler, uv * vec2(1.0,0.5) + vec2(0.0,0.5)).x);
+      uv = uv - floor(uv);
+      uv = 1.0 - uv; // ETC1压缩纹理时Y轴翻转，原因不详，没找到对应etcpack的命令行参数解决翻转问题。
+      return vec4( texture2D(sampler, uv * vec2(1.0,0.5)).xyz, texture2D(sampler, uv * vec2(1.0,0.5) + vec2(0.0,0.5)).x);
   }
   `+
   'void main() {\n' +
@@ -49,7 +50,7 @@ function main()
   gl.getExtension('WEBGL_compressed_texture_etc1');
 
   // alert(Object.keys(formats).filter(v => formats[v]));
-  alert(`需要使用Android平台运行示例！`);
+  alert(`需要使用Android平台运行示例！！！`);
 
   // Initialize shaders
   if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE))
@@ -148,8 +149,8 @@ function initTextures(gl, n)
   }
 
   // 加载ETC压缩纹理
-  var url = 'resources/t_0012lvyeshu_obj_p_d.ktx';
-  // var url = 'resources/orange.ktx';
+  // var url = 'resources/t_0012lvyeshu_obj_p_d.ktx';
+  var url = 'resources/orange.ktx';
 
   var loader = new KTXLoader();
   loader.load(url, (ktxData) =>

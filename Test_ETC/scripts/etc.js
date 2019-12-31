@@ -10,7 +10,7 @@ var fun = function ()
     var outDir = path.resolve(__dirname, "out");
 
     // execFile(exeDir + '/etcpack.exe', [input, outDir, `-s`, `fast`, `-c`, `etc1`, `-ktx`, `-aa`], { cwd: exeDir }, function (err, data)
-    execFile(exePath, [input, outDir, `-s`, `fast`, `-c`, `etc1`, `-ktx`, `-aa`], { cwd: exeDir }, function (err, data)
+    execFile(exePath, [input, outDir, `-s`, `fast`, `-c`, `etc1`, `-ktx`, `-as`], { cwd: exeDir }, function (err, data)
     {
         console.log(`error: ` + err)
 
