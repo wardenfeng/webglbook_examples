@@ -150,7 +150,8 @@ function initTextures(gl, n)
 
   // 加载ETC压缩纹理
   // var url = 'resources/t_0012lvyeshu_obj_p_d.ktx';
-  var url = 'resources/orange.ktx';
+  // var url = 'resources/orange.ktx';
+  var url = 'resources/bg-blocks.ktx';
 
   var loader = new KTXLoader();
   loader.load(url, (ktxData) =>
@@ -170,7 +171,10 @@ function loadTexture(gl, n, texture, u_Sampler, ktxData)
   gl.bindTexture(gl.TEXTURE_2D, texture);
 
   // Set the texture parameters
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   // Set the texture image
   for (var i = 0; i < ktxData.mipmaps.length; i++)
   {

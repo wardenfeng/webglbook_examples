@@ -62,6 +62,11 @@ function initVertexBuffers(gl) {
      0.5,  0.5,   1.0, 1.0,
      0.5, -0.5,   1.0, 0.0,
   ]);
+  for (var i = 0; i < verticesTexCoords.length; i++)
+  {
+    verticesTexCoords[i] *= 2;
+  }
+  
   var n = 4; // The number of vertices
 
   // Create the buffer object
@@ -119,7 +124,8 @@ function initTextures(gl, n) {
   // Register the event handler to be called on loading an image
   image.onload = function(){ loadTexture(gl, n, texture, u_Sampler, image); };
   // Tell the browser to load an image
-  image.src = '../resources/sky.jpg';
+  // image.src = '../resources/sky.jpg';
+  image.src = '../Test_ETC/resources/bg-blocks.png';
 
   return true;
 }
