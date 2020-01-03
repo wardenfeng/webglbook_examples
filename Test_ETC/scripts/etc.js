@@ -9,7 +9,7 @@ var fun = function ()
     var input = path.resolve(__dirname, "../resources/bg-blocks.png");
     var outDir = path.resolve(__dirname, "../resources");
 
-    var isDiscardAlpha = true;
+    var isDiscardAlpha = false;
 
     // execFile(exeDir + '/etcpack.exe', [input, outDir, `-s`, `fast`, `-c`, `etc1`, `-ktx`, `-aa`], { cwd: exeDir }, function (err, data)
 

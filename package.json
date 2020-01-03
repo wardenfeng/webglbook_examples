@@ -8,6 +8,7 @@
   },
   "scripts": {
     "etc": "node Test_ETC/scripts/etc.js",
+    "filp": "node Test_ETC/scripts/filp.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

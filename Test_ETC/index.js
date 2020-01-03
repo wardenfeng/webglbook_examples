@@ -20,7 +20,6 @@ var FSHADER_SOURCE =
   vec4 texture2DEtC1(sampler2D sampler,vec2 uv)
   {
     uv = uv - floor(uv);
-    uv.y = 1.0 - uv.y;// ETC1压缩纹理时Y轴翻转，原因不详，没找到对应etcpack的命令行参数解决翻转问题。
     return vec4( texture2D(sampler, uv * vec2(1.0,0.5)).xyz, texture2D(sampler, uv * vec2(1.0,0.5) + vec2(0.0,0.5)).x);
   }
   `+
@@ -164,6 +163,7 @@ function initTextures(gl, n)
 
 function loadTexture(gl, n, texture, u_Sampler, ktxData)
 {
+  alert(1);
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
   // Enable texture unit0
   gl.activeTexture(gl.TEXTURE0);
