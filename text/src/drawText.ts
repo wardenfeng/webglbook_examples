@@ -4,7 +4,7 @@ namespace text
     {
         var _font = style.toFontString();
 
-        const context = this.canvas.getContext('2d');
+        const context = canvas.getContext('2d');
         const measured = TextMetrics.measureText(_text || ' ', style, style.wordWrap, canvas);
         const width = measured.width;
         const height = measured.height;
@@ -69,7 +69,7 @@ namespace text
             else
             {
                 // set canvas text styles
-                context.fillStyle = _generateFillStyle(style, lines);
+                context.fillStyle = _generateFillStyle(canvas, style, lines, resolution);
                 context.strokeStyle = style.stroke;
 
                 context.shadowColor = "";
@@ -96,6 +96,8 @@ namespace text
                 if (style.stroke && style.strokeThickness)
                 {
                     drawLetterSpacing(
+                        canvas,
+                        style,
                         lines[i],
                         linePositionX + style.padding,
                         linePositionY + style.padding - dsOffsetText,
@@ -106,6 +108,8 @@ namespace text
                 if (style.fill)
                 {
                     drawLetterSpacing(
+                        canvas,
+                        style,
                         lines[i],
                         linePositionX + style.padding,
                         linePositionY + style.padding - dsOffsetText
@@ -122,11 +126,10 @@ namespace text
             {
                 canvas.width = trimmed.width;
                 canvas.height = trimmed.height;
-                this.context.putImageData(trimmed.data, 0, 0);
+                context.putImageData(trimmed.data, 0, 0);
             }
         }
     }
-
 
     /**
      * Generates the fill style. Can automatically generate a gradient based on the fill style being an array
@@ -135,8 +138,9 @@ namespace text
      * @param lines - The lines of text.
      * @return The fill style
      */
-    function _generateFillStyle(style: TextStyle, lines: string[])
+    function _generateFillStyle(canvas: HTMLCanvasElement, style: TextStyle, lines: string[], resolution = 1)
     {
+        const context = canvas.getContext('2d');
         var stylefill = style.fill;
         if (!Array.isArray(stylefill))
         {
@@ -154,8 +158,8 @@ namespace text
         let currentIteration: number;
         let stop: number;
 
-        const width = Math.ceil(this.canvas.width / this._resolution);
-        const height = Math.ceil(this.canvas.height / this._resolution);
+        const width = Math.ceil(canvas.width / resolution);
+        const height = Math.ceil(canvas.height / resolution);
 
         // make a copy of the style settings, so we can manipulate them later
         const fill: string[] = <any>stylefill.slice();
@@ -183,7 +187,7 @@ namespace text
         if (style.fillGradientType === TEXT_GRADIENT.LINEAR_VERTICAL)
         {
             // start the gradient at the top center of the canvas, and end at the bottom middle of the canvas
-            gradient = this.context.createLinearGradient(width / 2, 0, width / 2, height);
+            gradient = context.createLinearGradient(width / 2, 0, width / 2, height);
 
             // we need to repeat the gradient so that each individual line of text has the same vertical gradient effect
             // ['#FF0000', '#00FF00', '#0000FF'] over 2 lines would create stops at 0.125, 0.25, 0.375, 0.625, 0.75, 0.875
@@ -210,7 +214,7 @@ namespace text
         else
         {
             // start the gradient at the center left of the canvas, and end at the center right of the canvas
-            gradient = this.context.createLinearGradient(0, height / 2, width, height / 2);
+            gradient = context.createLinearGradient(0, height / 2, width, height / 2);
 
             // can just evenly space out the gradients in this case, as multiple lines makes no difference
             // to an even left to right gradient
@@ -244,10 +248,9 @@ namespace text
      * @param isStroke Is this drawing for the outside stroke of the
      *  text? If not, it's for the inside fill
      */
-    function drawLetterSpacing(text: string, x: number, y: number, isStroke = false)
+    function drawLetterSpacing(canvas: HTMLCanvasElement, style: TextStyle, text: string, x: number, y: number, isStroke = false)
     {
-        const style = this._style;
-
+        const context = canvas.getContext('2d');
         // letterSpacing of 0 means normal
         const letterSpacing = style.letterSpacing;
 
@@ -255,11 +258,11 @@ namespace text
         {
             if (isStroke)
             {
-                this.context.strokeText(text, x, y);
+                context.strokeText(text, x, y);
             }
             else
             {
-                this.context.fillText(text, x, y);
+                context.fillText(text, x, y);
             }
 
             return;
@@ -274,7 +277,7 @@ namespace text
         // https://medium.com/@giltayar/iterating-over-emoji-characters-the-es6-way-f06e4589516
         // https://github.com/orling/grapheme-splitter
         const stringArray = text.split('');
-        let previousWidth = this.context.measureText(text).width;
+        let previousWidth = context.measureText(text).width;
         let currentWidth = 0;
 
         for (let i = 0; i < stringArray.length; ++i)
@@ -283,13 +286,13 @@ namespace text
 
             if (isStroke)
             {
-                this.context.strokeText(currentChar, currentPosition, y);
+                context.strokeText(currentChar, currentPosition, y);
             }
             else
             {
-                this.context.fillText(currentChar, currentPosition, y);
+                context.fillText(currentChar, currentPosition, y);
             }
-            currentWidth = this.context.measureText(text.substring(i + 1)).width;
+            currentWidth = context.measureText(text.substring(i + 1)).width;
             currentPosition += previousWidth - currentWidth + letterSpacing;
             previousWidth = currentWidth;
         }

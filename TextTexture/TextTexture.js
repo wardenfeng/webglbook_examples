@@ -1,3 +1,6 @@
+/// <reference path="../text\out\text.d.ts" />
+
+
 // RotateObject.js (c) 2012 kanda and matsuda
 // Vertex shader program
 var VSHADER_SOURCE =
@@ -18,31 +21,36 @@ var FSHADER_SOURCE =
   '  gl_FragColor = texture2D(u_Sampler, v_TexCoord);\n' +
   '}\n';
 
-function main() {
+function main()
+{
   // Retrieve <canvas> element
   var canvas = document.getElementById("webgl");
 
   // Get the rendering context for WebGL
   var gl = getWebGLContext(canvas);
-  if (!gl) {
+  if (!gl)
+  {
     console.log('Failed to get the rendering context for WebGL');
     return;
   }
 
   // Initialize shaders
-  if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE, ['a_Position', 'a_TexCoord'])) {
+  if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE, ['a_Position', 'a_TexCoord']))
+  {
     console.log('Failed to initialize shaders');
     return;
   }
 
   // Set the vertex information
-  if (!initVertexBuffers(gl)) {
+  if (!initVertexBuffers(gl))
+  {
     console.log('Failed to set the vertex information');
     return;
   }
 
   // Set texture
-  if (!initTextures(gl)) {
+  if (!initTextures(gl))
+  {
     console.log('Failed to intialize the texture.');
     return;
   }
@@ -50,12 +58,13 @@ function main() {
   draw(gl);
 }
 
-function initVertexBuffers(gl) {
+function initVertexBuffers(gl)
+{
   var positions = [
-    -0.5,  0.5,
+    -0.5, 0.5,
     -0.5, -0.5,
-     0.5,  0.5,
-     0.5, -0.5
+    0.5, 0.5,
+    0.5, -0.5
   ];
   var texCoords = [
     0.0, 1.0,
@@ -67,7 +76,8 @@ function initVertexBuffers(gl) {
   // Create a buffer object
   var pbuffer = gl.createBuffer();
   var tbuffer = gl.createBuffer();
-  if (!pbuffer || !tbuffer) {
+  if (!pbuffer || !tbuffer)
+  {
     console.log('Failed to create buffer object(s)');
     return false;
   }
@@ -76,7 +86,8 @@ function initVertexBuffers(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, pbuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
   var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
-  if (a_Position < 0) {
+  if (a_Position < 0)
+  {
     console.log('Failed to get the storage location of a_Position');
     return -1;
   }
@@ -87,7 +98,8 @@ function initVertexBuffers(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, tbuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoords), gl.STATIC_DRAW);
   var a_TexCoord = gl.getAttribLocation(gl.program, 'a_TexCoord');
-  if (a_TexCoord < 0) {
+  if (a_TexCoord < 0)
+  {
     console.log('Failed to get the storage location of a_TexCoord');
     return -1;
   }
@@ -97,24 +109,28 @@ function initVertexBuffers(gl) {
   return true;
 }
 
-function initTextures(gl) {
+function initTextures(gl)
+{
   // Get the storage location of u_Sampler
   var samplerLoc = gl.getUniformLocation(gl.program, 'u_Sampler');
-  if (!samplerLoc) {
+  if (!samplerLoc)
+  {
     console.log('Failed to get the storage location of u_Sampler');
     return false;
   }
 
   // Create a texture
   var texture = gl.createTexture();
-  if (!texture) {
+  if (!texture)
+  {
     console.log("Failed to create the texture");
     return false;
   }
 
   // Create <canvas> to draw a text
   var textCanvas = document.createElement('canvas');
-  if (!textCanvas) {
+  if (!textCanvas)
+  {
     console.log('Failed to create canvas');
     return false;
   }
@@ -125,7 +141,8 @@ function initTextures(gl) {
 
   // Get the rendering context for 2D
   var ctx = textCanvas.getContext('2d');
-  if (!ctx) {
+  if (!ctx)
+  {
     console.log('Failed to get rendering context for 2d context');
     return false;
   }
@@ -144,29 +161,31 @@ function initTextures(gl) {
   ctx.shadowOffsetY = 3;
   ctx.shadowBlur = 4;
 
-  // Draw a text
-  var text = 'WebGL';
-  var textWidth = ctx.measureText(text).width;
-  ctx.fillText(text, (textCanvas.width-textWidth)/2, textCanvas.height/2 - 10);
-  text = 'Programming';
-  textWidth = ctx.measureText(text).width;
-  ctx.fillText(text, (textCanvas.width-textWidth)/2, textCanvas.height/2 + 25);
-  text = 'Guide';
-  textWidth = ctx.measureText(text).width;
-  ctx.fillText(text, (textCanvas.width-textWidth)/2, textCanvas.height/2 + 60);
-  ctx.font = '20px bold sans-serif';
-  ctx.fillStyle = 'white';
-  ctx.shadowColor = 'rgba(53, 60, 145, 1.0)';
-  text = 'matsuda 🌷 lea';
-  textWidth = ctx.measureText(text).width;
-  ctx.fillText(text, (textCanvas.width-textWidth)/2, textCanvas.height/2+100);
+  // // Draw a text
+  // var text = 'WebGL';
+  // var textWidth = ctx.measureText(text).width;
+  // ctx.fillText(text, (textCanvas.width-textWidth)/2, textCanvas.height/2 - 10);
+  // text = 'Programming';
+  // textWidth = ctx.measureText(text).width;
+  // ctx.fillText(text, (textCanvas.width-textWidth)/2, textCanvas.height/2 + 25);
+  // text = 'Guide';
+  // textWidth = ctx.measureText(text).width;
+  // ctx.fillText(text, (textCanvas.width-textWidth)/2, textCanvas.height/2 + 60);
+  // ctx.font = '20px bold sans-serif';
+  // ctx.fillStyle = 'white';
+  // ctx.shadowColor = 'rgba(53, 60, 145, 1.0)';
+  // text = 'matsuda 🌷 lea';
+  // textWidth = ctx.measureText(text).width;
+  // ctx.fillText(text, (textCanvas.width-textWidth)/2, textCanvas.height/2+100);
 
-  var imagedata =  ctx.getImageData(0,0,textCanvas.height,textCanvas.height);
+  // var imagedata =  ctx.getImageData(0,0,textCanvas.height,textCanvas.height);
+
+  text.drawText(textCanvas, "matsuda 🌷 lea", new text.TextStyle());
 
   // Load texture
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);  // Flip the image Y coordinate
   gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
 
   // Set texture parameters
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -180,7 +199,8 @@ function initTextures(gl) {
   return true;
 }
 
-function draw(gl) {
+function draw(gl)
+{
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);

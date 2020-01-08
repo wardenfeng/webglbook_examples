@@ -163,6 +163,8 @@ function initTextures(gl) {
 
   var imagedata =  ctx.getImageData(0,0,textCanvas.height,textCanvas.height);
 
+  draw
+
   // Load texture
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);  // Flip the image Y coordinate
   gl.bindTexture(gl.TEXTURE_2D, texture);

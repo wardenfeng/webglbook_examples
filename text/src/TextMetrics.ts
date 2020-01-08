@@ -76,7 +76,7 @@ namespace text
         /**
          * Cache of {@see PIXI.TextMetrics.FontMetrics} objects.
          */
-        static _fonts: { [key: string]: IFontMetrics };
+        static _fonts: { [key: string]: IFontMetrics } = {};
 
         /**
          * String used for calculate font metrics.

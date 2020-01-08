@@ -5,6 +5,8 @@
       "DOM",
       "ES2015",
     ],
+    "declaration": true,
+    "sourceMap": true,
     "outFile": "out/text.js"
   },
   "include": [

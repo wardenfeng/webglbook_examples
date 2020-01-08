@@ -666,6 +666,10 @@ var text;
          */
         TextMetrics._context = TextMetrics._canvas.getContext('2d');
         /**
+         * Cache of {@see PIXI.TextMetrics.FontMetrics} objects.
+         */
+        TextMetrics._fonts = {};
+        /**
          * String used for calculate font metrics.
          * These characters are all tall to help calculate the height required for text.
          */
@@ -1415,7 +1419,7 @@ var text;
     function drawText(canvas, _text, style, resolution) {
         if (resolution === void 0) { resolution = 1; }
         var _font = style.toFontString();
-        var context = this.canvas.getContext('2d');
+        var context = canvas.getContext('2d');
         var measured = text_3.TextMetrics.measureText(_text || ' ', style, style.wordWrap, canvas);
         var width = measured.width;
         var height = measured.height;
@@ -1467,7 +1471,7 @@ var text;
             }
             else {
                 // set canvas text styles
-                context.fillStyle = _generateFillStyle(style, lines);
+                context.fillStyle = _generateFillStyle(canvas, style, lines, resolution);
                 context.strokeStyle = style.stroke;
                 context.shadowColor = "";
                 context.shadowBlur = 0;
@@ -1485,10 +1489,10 @@ var text;
                     linePositionX += (maxLineWidth - lineWidths[i_1]) / 2;
                 }
                 if (style.stroke && style.strokeThickness) {
-                    drawLetterSpacing(lines[i_1], linePositionX + style.padding, linePositionY + style.padding - dsOffsetText, true);
+                    drawLetterSpacing(canvas, style, lines[i_1], linePositionX + style.padding, linePositionY + style.padding - dsOffsetText, true);
                 }
                 if (style.fill) {
-                    drawLetterSpacing(lines[i_1], linePositionX + style.padding, linePositionY + style.padding - dsOffsetText);
+                    drawLetterSpacing(canvas, style, lines[i_1], linePositionX + style.padding, linePositionY + style.padding - dsOffsetText);
                 }
             }
         }
@@ -1497,7 +1501,7 @@ var text;
             if (trimmed.data) {
                 canvas.width = trimmed.width;
                 canvas.height = trimmed.height;
-                this.context.putImageData(trimmed.data, 0, 0);
+                context.putImageData(trimmed.data, 0, 0);
             }
         }
     }
@@ -1509,7 +1513,9 @@ var text;
      * @param lines - The lines of text.
      * @return The fill style
      */
-    function _generateFillStyle(style, lines) {
+    function _generateFillStyle(canvas, style, lines, resolution) {
+        if (resolution === void 0) { resolution = 1; }
+        var context = canvas.getContext('2d');
         var stylefill = style.fill;
         if (!Array.isArray(stylefill)) {
             return stylefill;
@@ -1523,8 +1529,8 @@ var text;
         var totalIterations;
         var currentIteration;
         var stop;
-        var width = Math.ceil(this.canvas.width / this._resolution);
-        var height = Math.ceil(this.canvas.height / this._resolution);
+        var width = Math.ceil(canvas.width / resolution);
+        var height = Math.ceil(canvas.height / resolution);
         // make a copy of the style settings, so we can manipulate them later
         var fill = stylefill.slice();
         var fillGradientStops = style.fillGradientStops.slice();
@@ -1543,7 +1549,7 @@ var text;
         fillGradientStops.push(1);
         if (style.fillGradientType === text_3.TEXT_GRADIENT.LINEAR_VERTICAL) {
             // start the gradient at the top center of the canvas, and end at the bottom middle of the canvas
-            gradient = this.context.createLinearGradient(width / 2, 0, width / 2, height);
+            gradient = context.createLinearGradient(width / 2, 0, width / 2, height);
             // we need to repeat the gradient so that each individual line of text has the same vertical gradient effect
             // ['#FF0000', '#00FF00', '#0000FF'] over 2 lines would create stops at 0.125, 0.25, 0.375, 0.625, 0.75, 0.875
             totalIterations = (fill.length + 1) * lines.length;
@@ -1564,7 +1570,7 @@ var text;
         }
         else {
             // start the gradient at the center left of the canvas, and end at the center right of the canvas
-            gradient = this.context.createLinearGradient(0, height / 2, width, height / 2);
+            gradient = context.createLinearGradient(0, height / 2, width, height / 2);
             // can just evenly space out the gradients in this case, as multiple lines makes no difference
             // to an even left to right gradient
             totalIterations = fill.length + 1;
@@ -1590,17 +1596,17 @@ var text;
      * @param isStroke Is this drawing for the outside stroke of the
      *  text? If not, it's for the inside fill
      */
-    function drawLetterSpacing(text, x, y, isStroke) {
+    function drawLetterSpacing(canvas, style, text, x, y, isStroke) {
         if (isStroke === void 0) { isStroke = false; }
-        var style = this._style;
+        var context = canvas.getContext('2d');
         // letterSpacing of 0 means normal
         var letterSpacing = style.letterSpacing;
         if (letterSpacing === 0) {
             if (isStroke) {
-                this.context.strokeText(text, x, y);
+                context.strokeText(text, x, y);
             }
             else {
-                this.context.fillText(text, x, y);
+                context.fillText(text, x, y);
             }
             return;
         }
@@ -1612,17 +1618,17 @@ var text;
         // https://medium.com/@giltayar/iterating-over-emoji-characters-the-es6-way-f06e4589516
         // https://github.com/orling/grapheme-splitter
         var stringArray = text.split('');
-        var previousWidth = this.context.measureText(text).width;
+        var previousWidth = context.measureText(text).width;
         var currentWidth = 0;
         for (var i = 0; i < stringArray.length; ++i) {
             var currentChar = stringArray[i];
             if (isStroke) {
-                this.context.strokeText(currentChar, currentPosition, y);
+                context.strokeText(currentChar, currentPosition, y);
             }
             else {
-                this.context.fillText(currentChar, currentPosition, y);
+                context.fillText(currentChar, currentPosition, y);
             }
-            currentWidth = this.context.measureText(text.substring(i + 1)).width;
+            currentWidth = context.measureText(text.substring(i + 1)).width;
             currentPosition += previousWidth - currentWidth + letterSpacing;
             previousWidth = currentWidth;
         }
@@ -1758,3 +1764,4 @@ var text;
     }
     text.trimCanvas = trimCanvas;
 })(text || (text = {}));
+//# sourceMappingURL=text.js.map
