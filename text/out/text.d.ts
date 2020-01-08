@@ -619,3 +619,4 @@ declare namespace text {
         data: any;
     };
 }
+//# sourceMappingURL=text.d.ts.map

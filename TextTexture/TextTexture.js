@@ -180,7 +180,11 @@ function initTextures(gl)
 
   // var imagedata =  ctx.getImageData(0,0,textCanvas.height,textCanvas.height);
 
-  text.drawText(textCanvas, "matsuda 🌷 lea", new text.TextStyle());
+  var textStyle = new text.TextStyle();
+  textStyle.fontFamily = "bold sans-serif";
+  textStyle.dropShadow = true;
+
+  text.drawText(textCanvas, "matsuda 🌷 lea", textStyle);
 
   // Load texture
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);  // Flip the image Y coordinate
