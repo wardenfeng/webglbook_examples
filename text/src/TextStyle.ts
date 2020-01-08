@@ -16,7 +16,7 @@ namespace text
         LINEAR_HORIZONTAL = 1,
     }
 
-    const defaultStyle = {
+    const defaultStyle: Partial<TextStyle> = {
         align: 'left',
         breakWords: false,
         dropShadow: false,
@@ -69,6 +69,38 @@ namespace text
      */
     export class TextStyle
     {
+        styleID: number;
+
+        private _align: 'left' | 'center' | 'right' = 'left';
+        private _breakWords = false;
+        private _dropShadow = false;
+        private _dropShadowAlpha = 1;
+        private _dropShadowAngle = Math.PI / 6;
+        private _dropShadowBlur = 0;
+        private _dropShadowColor = 'black';
+        private _dropShadowDistance = 5;
+        private _fill = 'black';
+        private _fillGradientType = TEXT_GRADIENT.LINEAR_VERTICAL;
+        private _fillGradientStops = [];
+        private _fontFamily = 'Arial';
+        private _fontSize = 26;
+        private _fontStyle = 'normal';
+        private _fontVariant = 'normal';
+        private _fontWeight = 'normal';
+        private _letterSpacing = 0;
+        private _lineHeight = 0;
+        private _lineJoin = 'miter';
+        private _miterLimit = 10;
+        private _padding = 0;
+        private _stroke = 'black';
+        private _strokeThickness = 0;
+        private _textBaseline = 'alphabetic';
+        private _trim = false;
+        private _whiteSpace = 'pre';
+        private _wordWrap = false;
+        private _wordWrapWidth = 100;
+        private _leading = 0;
+
         /**
          * @param {object} [style] - The style parameters
          * @param {string} [style.align='left'] - Alignment for multiline text ('left', 'center' or 'right'),
@@ -117,7 +149,7 @@ namespace text
          * @param {boolean} [style.wordWrap=false] - Indicates if word wrap should be used
          * @param {number} [style.wordWrapWidth=100] - The width at which text will wrap, it needs wordWrap to be set to true
          */
-        constructor(style)
+        constructor(style: Partial<TextStyle>)
         {
             this.styleID = 0;
 
@@ -151,14 +183,12 @@ namespace text
 
         /**
          * Alignment for multiline text ('left', 'center' or 'right'), does not affect single line text
-         *
-         * @member {string}
          */
         get align()
         {
             return this._align;
         }
-        set align(align) // eslint-disable-line require-jsdoc
+        set align(align)
         {
             if (this._align !== align)
             {
