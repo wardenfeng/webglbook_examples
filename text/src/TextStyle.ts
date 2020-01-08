@@ -736,7 +736,7 @@ namespace text
 
             // Clean-up fontFamily property by quoting each font name
             // this will support font names with spaces
-            let fontFamilies = this.fontFamily;
+            let fontFamilies: string[] = <any>this.fontFamily;
 
             if (!Array.isArray(this.fontFamily))
             {
@@ -762,11 +762,10 @@ namespace text
 
     /**
      * Utility function to convert hexadecimal colors to strings, and simply return the color if it's a string.
-     * @private
-     * @param {number|number[]} color
-     * @return {string} The color as a string.
+     * @param color
+     * @return The color as a string.
      */
-    function getSingleColor(color)
+    function getSingleColor(color: string | number)
     {
         if (typeof color === 'number')
         {
@@ -790,7 +789,7 @@ namespace text
      * @param {number|number[]} color
      * @return {string} The color as a string.
      */
-    function getColor(color)
+    function getColor(color: string)
     {
         if (!Array.isArray(color))
         {
@@ -810,12 +809,12 @@ namespace text
     /**
      * Utility function to convert hexadecimal colors to strings, and simply return the color if it's a string.
      * This version can also convert array of colors
-     * @private
-     * @param {Array} array1 First array to compare
-     * @param {Array} array2 Second array to compare
-     * @return {boolean} Do the arrays contain the same values in the same order
+     * 
+     * @param array1 First array to compare
+     * @param array2 Second array to compare
+     * @return Do the arrays contain the same values in the same order
      */
-    function areArraysEqual(array1, array2)
+    function areArraysEqual(array1: any[], array2: any[])
     {
         if (!Array.isArray(array1) || !Array.isArray(array2))
         {
@@ -840,12 +839,12 @@ namespace text
 
     /**
      * Utility function to ensure that object properties are copied by value, and not by reference
-     * @private
-     * @param {Object} target Target object to copy properties into
-     * @param {Object} source Source object for the properties to copy
-     * @param {string} propertyObj Object containing properties names we want to loop over
+     * 
+     * @param target Target object to copy properties into
+     * @param source Source object for the properties to copy
+     * @param propertyObj Object containing properties names we want to loop over
      */
-    function deepCopyProperties(target, source, propertyObj)
+    function deepCopyProperties(target: any, source: any, propertyObj: Object)
     {
         for (const prop in propertyObj)
         {
@@ -857,5 +856,20 @@ namespace text
                 target[prop] = source[prop];
             }
         }
+    }
+
+    /**
+     * Converts a hexadecimal color number to a string.
+     *
+     * @example
+     * PIXI.utils.hex2string(0xffffff); // returns "#ffffff"
+     */
+    function hex2string(hex: number): string
+    {
+        let hexString = hex.toString(16);
+
+        hexString = '000000'.substr(0, 6 - hexString.length) + hexString;
+
+        return `#${hexString}`;
     }
 }
