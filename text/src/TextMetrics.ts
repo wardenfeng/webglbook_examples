@@ -62,18 +62,7 @@ namespace text
          */
         static _canvas = (() =>
         {
-            var c: HTMLCanvasElement;
-            try
-            {
-                // OffscreenCanvas2D measureText can be up to 40% faster.
-                c = <any>new OffscreenCanvas(0, 0);
-
-                c = c.getContext('2d') ? c : document.createElement('canvas');
-            }
-            catch (ex)
-            {
-                c = document.createElement('canvas');
-            }
+            var c = document.createElement('canvas');
 
             c.width = c.height = 10;
             return c;

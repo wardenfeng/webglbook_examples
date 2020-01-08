@@ -511,7 +511,7 @@ namespace text
         }
         set stroke(stroke)
         {
-            const outputColor = getSingleColor(stroke);
+            const outputColor = getSingleColor(<any>stroke);
             if (this._stroke !== outputColor)
             {
                 this._stroke = outputColor;

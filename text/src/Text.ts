@@ -109,30 +109,6 @@ namespace text
 
             drawText(this.canvas, this.text, style);
 
-            this.updateTexture();
-        }
-
-        /**
-         * Updates texture size based on canvas size
-         *
-         * @private
-         */
-        updateTexture()
-        {
-            const canvas = this.canvas;
-
-            if (this._style.trim)
-            {
-                const trimmed = trimCanvas(canvas);
-
-                if (trimmed.data)
-                {
-                    canvas.width = trimmed.width;
-                    canvas.height = trimmed.height;
-                    this.context.putImageData(trimmed.data, 0, 0);
-                }
-            }
-
             this.dirty = false;
         }
 

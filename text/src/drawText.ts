@@ -113,6 +113,18 @@ namespace text
                 }
             }
         }
+
+        if (style.trim)
+        {
+            const trimmed = trimCanvas(canvas);
+
+            if (trimmed.data)
+            {
+                canvas.width = trimmed.width;
+                canvas.height = trimmed.height;
+                this.context.putImageData(trimmed.data, 0, 0);
+            }
+        }
     }
 
 

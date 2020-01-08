@@ -12,12 +12,9 @@ namespace text
     /**
      * Trim transparent borders from a canvas
      *
-     * @memberof PIXI.utils
-     * @function trimCanvas
-     * @param {HTMLCanvasElement} canvas - the canvas to trim
-     * @returns {object} Trim data
+     * @param canvas - the canvas to trim
      */
-    export function trimCanvas(canvas: HTMLCanvasElement): { width: number; height: number; data?: ImageData }
+    export function trimCanvas(canvas: HTMLCanvasElement)
     {
         // https://gist.github.com/remy/784508
 
