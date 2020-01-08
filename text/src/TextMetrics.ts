@@ -55,7 +55,7 @@ namespace text
         /**
          * The font properties object from TextMetrics.measureFont
          */
-        fontProperties: Object;
+        fontProperties: IFontMetrics;
 
         /**
          * Cached canvas element for measuring text
@@ -144,7 +144,7 @@ namespace text
          * @param maxLineWidth - the maximum line width for all measured lines
          * @param fontProperties - the font properties object from TextMetrics.measureFont
          */
-        constructor(text: string, style: TextStyle, width: number, height: number, lines: string[], lineWidths: number[], lineHeight: number, maxLineWidth: number, fontProperties: Object)
+        constructor(text: string, style: TextStyle, width: number, height: number, lines: string[], lineWidths: number[], lineHeight: number, maxLineWidth: number, fontProperties: IFontMetrics)
         {
             this.text = text;
             this.style = style;
