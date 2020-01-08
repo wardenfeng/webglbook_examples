@@ -91,7 +91,7 @@ namespace text
         /**
          * Cache of {@see PIXI.TextMetrics.FontMetrics} objects.
          */
-        static _fonts: {};
+        static _fonts: { [key: string]: IFontMetrics };
 
         /**
          * String used for calculate font metrics.
@@ -237,14 +237,18 @@ namespace text
          * bounds set by the Text object's wordWrapWidth property.
          *
          * @private
-         * @param {string} text - String to apply word wrapping to
-         * @param {PIXI.TextStyle} style - the style to use when wrapping
-         * @param {HTMLCanvasElement} [canvas] - optional specification of the canvas to use for measuring.
-         * @return {string} New string with new lines applied where required
+         * @param text - String to apply word wrapping to
+         * @param style - the style to use when wrapping
+         * @param canvas - optional specification of the canvas to use for measuring.
+         * @return New string with new lines applied where required
          */
-        static wordWrap(text, style, canvas = TextMetrics._canvas)
+        static wordWrap(text: string, style: TextStyle, canvas = TextMetrics._canvas)
         {
             const context = canvas.getContext('2d');
+            if (!context)
+            {
+                throw `获取 CanvasRenderingContext2D 失败！`;
+            }
 
             let width = 0;
             let line = '';
@@ -546,10 +550,10 @@ namespace text
          * Determines if char is a breaking whitespace.
          *
          * @private
-         * @param  {string}  char  The character
-         * @return {boolean}  True if whitespace, False otherwise.
+         * @param char  The character
+         * @return True if whitespace, False otherwise.
          */
-        static isBreakingSpace(char)
+        static isBreakingSpace(char: string)
         {
             if (typeof char !== 'string')
             {
@@ -563,12 +567,12 @@ namespace text
          * Splits a string into words, breaking-spaces and newLine characters
          *
          * @private
-         * @param  {string}  text       The text
-         * @return {string[]}  A tokenized array
+         * @param text       The text
+         * @return A tokenized array
          */
-        static tokenize(text)
+        static tokenize(text: string)
         {
-            const tokens = [];
+            const tokens: string[] = [];
             let token = '';
 
             if (typeof text !== 'string')
@@ -611,11 +615,11 @@ namespace text
          * Examples are if the token is CJK or numbers.
          * It must return a boolean.
          *
-         * @param  {string}  token       The token
-         * @param  {boolean}  breakWords  The style attr break words
-         * @return {boolean} whether to break word or not
+         * @param token       The token
+         * @param breakWords  The style attr break words
+         * @return whether to break word or not
          */
-        static canBreakWords(token, breakWords)
+        static canBreakWords(token: string, breakWords: boolean)
         {
             return breakWords;
         }
@@ -628,14 +632,14 @@ namespace text
          * For example certain characters in CJK langs or numbers.
          * It must return a boolean.
          *
-         * @param  {string}  char      The character
-         * @param  {string}  nextChar  The next character
-         * @param  {string}  token     The token/word the characters are from
-         * @param  {number}  index     The index in the token of the char
-         * @param  {boolean}  breakWords  The style attr break words
-         * @return {boolean} whether to break word or not
+         * @param char      The character
+         * @param nextChar  The next character
+         * @param token     The token/word the characters are from
+         * @param index     The index in the token of the char
+         * @param breakWords  The style attr break words
+         * @return whether to break word or not
          */
-        static canBreakChars(char, nextChar, token, index, breakWords) // eslint-disable-line no-unused-vars
+        static canBreakChars(char: string, nextChar: string, token: string, index: number, breakWords: boolean) // eslint-disable-line no-unused-vars
         {
             return true;
         }
@@ -651,10 +655,10 @@ namespace text
          * // Correctly splits emojis, eg "🤪🤪" will result in two element array, each with one emoji.
          * TextMetrics.wordWrapSplit = (token) => [...token];
          *
-         * @param  {string}  token The token to split
-         * @return {string[]} The characters of the token
+         * @param token The token to split
+         * @return The characters of the token
          */
-        static wordWrapSplit(token)
+        static wordWrapSplit(token: string)
         {
             return token.split('');
         }
@@ -662,11 +666,10 @@ namespace text
         /**
          * Calculates the ascent, descent and fontSize of a given font-style
          *
-         * @static
-         * @param {string} font - String representing the style of the font
-         * @return {PIXI.IFontMetrics} Font properties object
+         * @param font - String representing the style of the font
+         * @return Font properties object
          */
-        static measureFont(font)
+        static measureFont(font: string)
         {
             // as this method is used for preparing assets, don't recalculate things if we don't need to
             if (TextMetrics._fonts[font])
@@ -674,7 +677,7 @@ namespace text
                 return TextMetrics._fonts[font];
             }
 
-            const properties = {};
+            const properties: IFontMetrics = <any>{};
 
             const canvas = TextMetrics._canvas;
             const context = TextMetrics._context;
@@ -767,8 +770,7 @@ namespace text
         /**
          * Clear font metrics in metrics cache.
          *
-         * @static
-         * @param {string} [font] - font name. If font name not set then clear cache for all fonts.
+         * @param font - font name. If font name not set then clear cache for all fonts.
          */
         static clearMetrics(font = '')
         {
@@ -782,4 +784,24 @@ namespace text
             }
         }
     }
+
+    /**
+     * A number, or a string containing a number.
+     */
+    interface IFontMetrics
+    {
+        /**
+         * Font ascent
+         */
+        ascent: number;
+        /**
+         * Font descent
+         */
+        descent: number;
+        /**
+         * Font size
+         */
+        fontSize: number;
+    }
+
 }
