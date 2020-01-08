@@ -89,12 +89,12 @@ namespace text
         private _fontWeight = 'normal';
         private _letterSpacing = 0;
         private _lineHeight = 0;
-        private _lineJoin = 'miter';
+        private _lineJoin: CanvasLineJoin = 'miter';
         private _miterLimit = 10;
         private _padding = 0;
-        private _stroke: number | string = 'black';
+        private _stroke: string | CanvasGradient | CanvasPattern = 'black';
         private _strokeThickness = 0;
-        private _textBaseline = 'alphabetic';
+        private _textBaseline: CanvasTextBaseline = 'alphabetic';
         private _trim = false;
         private _whiteSpace = 'pre';
         private _wordWrap = false;
@@ -104,7 +104,7 @@ namespace text
         /**
          * @param style - The style parameters
          */
-        constructor(style: Partial<TextStyle>)
+        constructor(style?: Partial<TextStyle>)
         {
             this.styleID = 0;
 
@@ -719,7 +719,7 @@ namespace text
      * @param source Source object for the properties to copy
      * @param propertyObj Object containing properties names we want to loop over
      */
-    function deepCopyProperties(target: any, source: any, propertyObj: Object)
+    function deepCopyProperties(target: any, source: any, propertyObj?: Object)
     {
         for (const prop in propertyObj)
         {

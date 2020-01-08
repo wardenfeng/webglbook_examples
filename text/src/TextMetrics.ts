@@ -1,7 +1,6 @@
 namespace text
 {
 
-
     /**
      * The TextMetrics object represents the measurement of a block of text with a specified style.
      *
@@ -9,9 +8,6 @@ namespace text
      * let style = new PIXI.TextStyle({fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'})
      * let textMetrics = PIXI.TextMetrics.measureText('Your text', style)
      * ```
-     *
-     * @class
-     * @memberof PIXI
      */
     export class TextMetrics
     {
@@ -164,11 +160,11 @@ namespace text
         /**
          * Measures the supplied string of text and returns a Rectangle.
          *
-         * @param {string} text - the text to measure.
-         * @param {PIXI.TextStyle} style - the text style to use for measuring
-         * @param {boolean} [wordWrap] - optional override for if word-wrap should be applied to the text.
-         * @param {HTMLCanvasElement} [canvas] - optional specification of the canvas to use for measuring.
-         * @return {PIXI.TextMetrics} measured width and height of the text.
+         * @param text - the text to measure.
+         * @param style - the text style to use for measuring
+         * @param wordWrap - optional override for if word-wrap should be applied to the text.
+         * @param canvas - optional specification of the canvas to use for measuring.
+         * @return measured width and height of the text.
          */
         static measureText(text: string, style: TextStyle, wordWrap: boolean, canvas = TextMetrics._canvas)
         {
