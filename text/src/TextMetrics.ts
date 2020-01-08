@@ -793,7 +793,7 @@ namespace text
         /**
          * Font ascent
          */
-        ascent: number;
+        ascent: string | number;
         /**
          * Font descent
          */

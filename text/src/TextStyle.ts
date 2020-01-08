@@ -77,12 +77,12 @@ namespace text
         private _dropShadowAlpha = 1;
         private _dropShadowAngle = Math.PI / 6;
         private _dropShadowBlur = 0;
-        private _dropShadowColor = 'black';
+        private _dropShadowColor: string | number = 'black';
         private _dropShadowDistance = 5;
-        private _fill = 'black';
+        private _fill: string | number = 'black';
         private _fillGradientType = TEXT_GRADIENT.LINEAR_VERTICAL;
-        private _fillGradientStops = [];
-        private _fontFamily = 'Arial';
+        private _fillGradientStops: number[] = [];
+        private _fontFamily: string | string[] = 'Arial';
         private _fontSize = 26;
         private _fontStyle = 'normal';
         private _fontVariant = 'normal';
@@ -92,7 +92,7 @@ namespace text
         private _lineJoin = 'miter';
         private _miterLimit = 10;
         private _padding = 0;
-        private _stroke = 'black';
+        private _stroke: number | string = 'black';
         private _strokeThickness = 0;
         private _textBaseline = 'alphabetic';
         private _trim = false;
@@ -102,52 +102,7 @@ namespace text
         private _leading = 0;
 
         /**
-         * @param {object} [style] - The style parameters
-         * @param {string} [style.align='left'] - Alignment for multiline text ('left', 'center' or 'right'),
-         *  does not affect single line text
-         * @param {boolean} [style.breakWords=false] - Indicates if lines can be wrapped within words, it
-         *  needs wordWrap to be set to true
-         * @param {boolean} [style.dropShadow=false] - Set a drop shadow for the text
-         * @param {number} [style.dropShadowAlpha=1] - Set alpha for the drop shadow
-         * @param {number} [style.dropShadowAngle=Math.PI/6] - Set a angle of the drop shadow
-         * @param {number} [style.dropShadowBlur=0] - Set a shadow blur radius
-         * @param {string|number} [style.dropShadowColor='black'] - A fill style to be used on the dropshadow e.g 'red', '#00FF00'
-         * @param {number} [style.dropShadowDistance=5] - Set a distance of the drop shadow
-         * @param {string|string[]|number|number[]|CanvasGradient|CanvasPattern} [style.fill='black'] - A canvas
-         *  fillstyle that will be used on the text e.g 'red', '#00FF00'. Can be an array to create a gradient
-         *  eg ['#000000','#FFFFFF']
-         * {@link https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle|MDN}
-         * @param {number} [style.fillGradientType=PIXI.TEXT_GRADIENT.LINEAR_VERTICAL] - If fill is an array of colours
-         *  to create a gradient, this can change the type/direction of the gradient. See {@link PIXI.TEXT_GRADIENT}
-         * @param {number[]} [style.fillGradientStops] - If fill is an array of colours to create a gradient, this array can set
-         * the stop points (numbers between 0 and 1) for the color, overriding the default behaviour of evenly spacing them.
-         * @param {string|string[]} [style.fontFamily='Arial'] - The font family
-         * @param {number|string} [style.fontSize=26] - The font size (as a number it converts to px, but as a string,
-         *  equivalents are '26px','20pt','160%' or '1.6em')
-         * @param {string} [style.fontStyle='normal'] - The font style ('normal', 'italic' or 'oblique')
-         * @param {string} [style.fontVariant='normal'] - The font variant ('normal' or 'small-caps')
-         * @param {string} [style.fontWeight='normal'] - The font weight ('normal', 'bold', 'bolder', 'lighter' and '100',
-         *  '200', '300', '400', '500', '600', '700', 800' or '900')
-         * @param {number} [style.leading=0] - The space between lines
-         * @param {number} [style.letterSpacing=0] - The amount of spacing between letters, default is 0
-         * @param {number} [style.lineHeight] - The line height, a number that represents the vertical space that a letter uses
-         * @param {string} [style.lineJoin='miter'] - The lineJoin property sets the type of corner created, it can resolve
-         *      spiked text issues. Possible values "miter" (creates a sharp corner), "round" (creates a round corner) or "bevel"
-         *      (creates a squared corner).
-         * @param {number} [style.miterLimit=10] - The miter limit to use when using the 'miter' lineJoin mode. This can reduce
-         *      or increase the spikiness of rendered text.
-         * @param {number} [style.padding=0] - Occasionally some fonts are cropped. Adding some padding will prevent this from
-         *     happening by adding padding to all sides of the text.
-         * @param {string|number} [style.stroke='black'] - A canvas fillstyle that will be used on the text stroke
-         *  e.g 'blue', '#FCFF00'
-         * @param {number} [style.strokeThickness=0] - A number that represents the thickness of the stroke.
-         *  Default is 0 (no stroke)
-         * @param {boolean} [style.trim=false] - Trim transparent borders
-         * @param {string} [style.textBaseline='alphabetic'] - The baseline of the text that is rendered.
-         * @param {string} [style.whiteSpace='pre'] - Determines whether newlines & spaces are collapsed or preserved "normal"
-         *      (collapse, collapse), "pre" (preserve, preserve) | "pre-line" (preserve, collapse). It needs wordWrap to be set to true
-         * @param {boolean} [style.wordWrap=false] - Indicates if word wrap should be used
-         * @param {number} [style.wordWrapWidth=100] - The width at which text will wrap, it needs wordWrap to be set to true
+         * @param style - The style parameters
          */
         constructor(style: Partial<TextStyle>)
         {
@@ -162,7 +117,7 @@ namespace text
          * Creates a new TextStyle object with the same values as this one.
          * Note that the only the properties of the object are cloned.
          *
-         * @return {PIXI.TextStyle} New cloned TextStyle object
+         * @return New cloned TextStyle object
          */
         clone()
         {
@@ -199,14 +154,12 @@ namespace text
 
         /**
          * Indicates if lines can be wrapped within words, it needs wordWrap to be set to true
-         *
-         * @member {boolean}
          */
         get breakWords()
         {
             return this._breakWords;
         }
-        set breakWords(breakWords) // eslint-disable-line require-jsdoc
+        set breakWords(breakWords)
         {
             if (this._breakWords !== breakWords)
             {
@@ -217,14 +170,12 @@ namespace text
 
         /**
          * Set a drop shadow for the text
-         *
-         * @member {boolean}
          */
         get dropShadow()
         {
             return this._dropShadow;
         }
-        set dropShadow(dropShadow) // eslint-disable-line require-jsdoc
+        set dropShadow(dropShadow)
         {
             if (this._dropShadow !== dropShadow)
             {
@@ -235,14 +186,12 @@ namespace text
 
         /**
          * Set alpha for the drop shadow
-         *
-         * @member {number}
          */
         get dropShadowAlpha()
         {
             return this._dropShadowAlpha;
         }
-        set dropShadowAlpha(dropShadowAlpha) // eslint-disable-line require-jsdoc
+        set dropShadowAlpha(dropShadowAlpha)
         {
             if (this._dropShadowAlpha !== dropShadowAlpha)
             {
@@ -253,14 +202,12 @@ namespace text
 
         /**
          * Set a angle of the drop shadow
-         *
-         * @member {number}
          */
         get dropShadowAngle()
         {
             return this._dropShadowAngle;
         }
-        set dropShadowAngle(dropShadowAngle) // eslint-disable-line require-jsdoc
+        set dropShadowAngle(dropShadowAngle)
         {
             if (this._dropShadowAngle !== dropShadowAngle)
             {
@@ -271,14 +218,12 @@ namespace text
 
         /**
          * Set a shadow blur radius
-         *
-         * @member {number}
          */
         get dropShadowBlur()
         {
             return this._dropShadowBlur;
         }
-        set dropShadowBlur(dropShadowBlur) // eslint-disable-line require-jsdoc
+        set dropShadowBlur(dropShadowBlur)
         {
             if (this._dropShadowBlur !== dropShadowBlur)
             {
@@ -289,16 +234,14 @@ namespace text
 
         /**
          * A fill style to be used on the dropshadow e.g 'red', '#00FF00'
-         *
-         * @member {string|number}
          */
         get dropShadowColor()
         {
             return this._dropShadowColor;
         }
-        set dropShadowColor(dropShadowColor) // eslint-disable-line require-jsdoc
+        set dropShadowColor(dropShadowColor)
         {
-            const outputColor = getColor(dropShadowColor);
+            const outputColor = getSingleColor(dropShadowColor);
             if (this._dropShadowColor !== outputColor)
             {
                 this._dropShadowColor = outputColor;
@@ -308,14 +251,12 @@ namespace text
 
         /**
          * Set a distance of the drop shadow
-         *
-         * @member {number}
          */
         get dropShadowDistance()
         {
             return this._dropShadowDistance;
         }
-        set dropShadowDistance(dropShadowDistance) // eslint-disable-line require-jsdoc
+        set dropShadowDistance(dropShadowDistance)
         {
             if (this._dropShadowDistance !== dropShadowDistance)
             {
@@ -327,17 +268,16 @@ namespace text
         /**
          * A canvas fillstyle that will be used on the text e.g 'red', '#00FF00'.
          * Can be an array to create a gradient eg ['#000000','#FFFFFF']
-         * {@link https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle|MDN}
-         *
-         * @member {string|string[]|number|number[]|CanvasGradient|CanvasPattern}
+         * 
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
          */
         get fill()
         {
             return this._fill;
         }
-        set fill(fill) // eslint-disable-line require-jsdoc
+        set fill(fill)
         {
-            const outputColor = getColor(fill);
+            const outputColor = getSingleColor(fill);
             if (this._fill !== outputColor)
             {
                 this._fill = outputColor;
@@ -347,15 +287,12 @@ namespace text
 
         /**
          * If fill is an array of colours to create a gradient, this can change the type/direction of the gradient.
-         * See {@link PIXI.TEXT_GRADIENT}
-         *
-         * @member {number}
          */
         get fillGradientType()
         {
             return this._fillGradientType;
         }
-        set fillGradientType(fillGradientType) // eslint-disable-line require-jsdoc
+        set fillGradientType(fillGradientType)
         {
             if (this._fillGradientType !== fillGradientType)
             {
@@ -367,14 +304,12 @@ namespace text
         /**
          * If fill is an array of colours to create a gradient, this array can set the stop points
          * (numbers between 0 and 1) for the color, overriding the default behaviour of evenly spacing them.
-         *
-         * @member {number[]}
          */
         get fillGradientStops()
         {
             return this._fillGradientStops;
         }
-        set fillGradientStops(fillGradientStops) // eslint-disable-line require-jsdoc
+        set fillGradientStops(fillGradientStops)
         {
             if (!areArraysEqual(this._fillGradientStops, fillGradientStops))
             {
@@ -385,14 +320,12 @@ namespace text
 
         /**
          * The font family
-         *
-         * @member {string|string[]}
          */
         get fontFamily()
         {
             return this._fontFamily;
         }
-        set fontFamily(fontFamily) // eslint-disable-line require-jsdoc
+        set fontFamily(fontFamily)
         {
             if (this.fontFamily !== fontFamily)
             {
@@ -404,14 +337,12 @@ namespace text
         /**
          * The font size
          * (as a number it converts to px, but as a string, equivalents are '26px','20pt','160%' or '1.6em')
-         *
-         * @member {number|string}
          */
         get fontSize()
         {
             return this._fontSize;
         }
-        set fontSize(fontSize) // eslint-disable-line require-jsdoc
+        set fontSize(fontSize)
         {
             if (this._fontSize !== fontSize)
             {
@@ -423,14 +354,12 @@ namespace text
         /**
          * The font style
          * ('normal', 'italic' or 'oblique')
-         *
-         * @member {string}
          */
         get fontStyle()
         {
             return this._fontStyle;
         }
-        set fontStyle(fontStyle) // eslint-disable-line require-jsdoc
+        set fontStyle(fontStyle)
         {
             if (this._fontStyle !== fontStyle)
             {
@@ -442,14 +371,12 @@ namespace text
         /**
          * The font variant
          * ('normal' or 'small-caps')
-         *
-         * @member {string}
          */
         get fontVariant()
         {
             return this._fontVariant;
         }
-        set fontVariant(fontVariant) // eslint-disable-line require-jsdoc
+        set fontVariant(fontVariant)
         {
             if (this._fontVariant !== fontVariant)
             {
@@ -461,14 +388,12 @@ namespace text
         /**
          * The font weight
          * ('normal', 'bold', 'bolder', 'lighter' and '100', '200', '300', '400', '500', '600', '700', 800' or '900')
-         *
-         * @member {string}
          */
         get fontWeight()
         {
             return this._fontWeight;
         }
-        set fontWeight(fontWeight) // eslint-disable-line require-jsdoc
+        set fontWeight(fontWeight)
         {
             if (this._fontWeight !== fontWeight)
             {
@@ -479,14 +404,12 @@ namespace text
 
         /**
          * The amount of spacing between letters, default is 0
-         *
-         * @member {number}
          */
         get letterSpacing()
         {
             return this._letterSpacing;
         }
-        set letterSpacing(letterSpacing) // eslint-disable-line require-jsdoc
+        set letterSpacing(letterSpacing)
         {
             if (this._letterSpacing !== letterSpacing)
             {
@@ -497,14 +420,12 @@ namespace text
 
         /**
          * The line height, a number that represents the vertical space that a letter uses
-         *
-         * @member {number}
          */
         get lineHeight()
         {
             return this._lineHeight;
         }
-        set lineHeight(lineHeight) // eslint-disable-line require-jsdoc
+        set lineHeight(lineHeight)
         {
             if (this._lineHeight !== lineHeight)
             {
@@ -515,14 +436,12 @@ namespace text
 
         /**
          * The space between lines
-         *
-         * @member {number}
          */
         get leading()
         {
             return this._leading;
         }
-        set leading(leading) // eslint-disable-line require-jsdoc
+        set leading(leading)
         {
             if (this._leading !== leading)
             {
@@ -534,14 +453,12 @@ namespace text
         /**
          * The lineJoin property sets the type of corner created, it can resolve spiked text issues.
          * Default is 'miter' (creates a sharp corner).
-         *
-         * @member {string}
          */
         get lineJoin()
         {
             return this._lineJoin;
         }
-        set lineJoin(lineJoin) // eslint-disable-line require-jsdoc
+        set lineJoin(lineJoin)
         {
             if (this._lineJoin !== lineJoin)
             {
@@ -553,14 +470,12 @@ namespace text
         /**
          * The miter limit to use when using the 'miter' lineJoin mode
          * This can reduce or increase the spikiness of rendered text.
-         *
-         * @member {number}
          */
         get miterLimit()
         {
             return this._miterLimit;
         }
-        set miterLimit(miterLimit) // eslint-disable-line require-jsdoc
+        set miterLimit(miterLimit)
         {
             if (this._miterLimit !== miterLimit)
             {
@@ -572,14 +487,12 @@ namespace text
         /**
          * Occasionally some fonts are cropped. Adding some padding will prevent this from happening
          * by adding padding to all sides of the text.
-         *
-         * @member {number}
          */
         get padding()
         {
             return this._padding;
         }
-        set padding(padding) // eslint-disable-line require-jsdoc
+        set padding(padding)
         {
             if (this._padding !== padding)
             {
@@ -591,16 +504,14 @@ namespace text
         /**
          * A canvas fillstyle that will be used on the text stroke
          * e.g 'blue', '#FCFF00'
-         *
-         * @member {string|number}
          */
         get stroke()
         {
             return this._stroke;
         }
-        set stroke(stroke) // eslint-disable-line require-jsdoc
+        set stroke(stroke)
         {
-            const outputColor = getColor(stroke);
+            const outputColor = getSingleColor(stroke);
             if (this._stroke !== outputColor)
             {
                 this._stroke = outputColor;
@@ -611,14 +522,12 @@ namespace text
         /**
          * A number that represents the thickness of the stroke.
          * Default is 0 (no stroke)
-         *
-         * @member {number}
          */
         get strokeThickness()
         {
             return this._strokeThickness;
         }
-        set strokeThickness(strokeThickness) // eslint-disable-line require-jsdoc
+        set strokeThickness(strokeThickness)
         {
             if (this._strokeThickness !== strokeThickness)
             {
@@ -629,14 +538,12 @@ namespace text
 
         /**
          * The baseline of the text that is rendered.
-         *
-         * @member {string}
          */
         get textBaseline()
         {
             return this._textBaseline;
         }
-        set textBaseline(textBaseline) // eslint-disable-line require-jsdoc
+        set textBaseline(textBaseline)
         {
             if (this._textBaseline !== textBaseline)
             {
@@ -647,14 +554,12 @@ namespace text
 
         /**
          * Trim transparent borders
-         *
-         * @member {boolean}
          */
         get trim()
         {
             return this._trim;
         }
-        set trim(trim) // eslint-disable-line require-jsdoc
+        set trim(trim)
         {
             if (this._trim !== trim)
             {
@@ -672,14 +577,12 @@ namespace text
          * 'normal'     | Collapse      |   Collapse
          * 'pre'        | Preserve      |   Preserve
          * 'pre-line'   | Preserve      |   Collapse
-         *
-         * @member {string}
          */
         get whiteSpace()
         {
             return this._whiteSpace;
         }
-        set whiteSpace(whiteSpace) // eslint-disable-line require-jsdoc
+        set whiteSpace(whiteSpace)
         {
             if (this._whiteSpace !== whiteSpace)
             {
@@ -690,14 +593,12 @@ namespace text
 
         /**
          * Indicates if word wrap should be used
-         *
-         * @member {boolean}
          */
         get wordWrap()
         {
             return this._wordWrap;
         }
-        set wordWrap(wordWrap) // eslint-disable-line require-jsdoc
+        set wordWrap(wordWrap)
         {
             if (this._wordWrap !== wordWrap)
             {
@@ -708,14 +609,12 @@ namespace text
 
         /**
          * The width at which text will wrap, it needs wordWrap to be set to true
-         *
-         * @member {number}
          */
         get wordWrapWidth()
         {
             return this._wordWrapWidth;
         }
-        set wordWrapWidth(wordWrapWidth) // eslint-disable-line require-jsdoc
+        set wordWrapWidth(wordWrapWidth)
         {
             if (this._wordWrapWidth !== wordWrapWidth)
             {
@@ -727,7 +626,7 @@ namespace text
         /**
          * Generates a font style string to use for `TextMetrics.measureFont()`.
          *
-         * @return {string} Font style string, for passing to `TextMetrics.measureFont()`
+         * @return Font style string, for passing to `TextMetrics.measureFont()`
          */
         toFontString()
         {
@@ -780,30 +679,6 @@ namespace text
         }
 
         return color;
-    }
-
-    /**
-     * Utility function to convert hexadecimal colors to strings, and simply return the color if it's a string.
-     * This version can also convert array of colors
-     * @private
-     * @param {number|number[]} color
-     * @return {string} The color as a string.
-     */
-    function getColor(color: string)
-    {
-        if (!Array.isArray(color))
-        {
-            return getSingleColor(color);
-        }
-        else
-        {
-            for (let i = 0; i < color.length; ++i)
-            {
-                color[i] = getSingleColor(color[i]);
-            }
-
-            return color;
-        }
     }
 
     /**
