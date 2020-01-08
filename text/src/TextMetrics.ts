@@ -16,79 +16,148 @@ namespace text
     export class TextMetrics
     {
         /**
-         * @param {string} text - the text that was measured
-         * @param {PIXI.TextStyle} style - the style that was measured
-         * @param {number} width - the measured width of the text
-         * @param {number} height - the measured height of the text
-         * @param {string[]} lines - an array of the lines of text broken by new lines and wrapping if specified in style
-         * @param {number[]} lineWidths - an array of the line widths for each line matched to `lines`
-         * @param {number} lineHeight - the measured line height for this style
-         * @param {number} maxLineWidth - the maximum line width for all measured lines
-         * @param {Object} fontProperties - the font properties object from TextMetrics.measureFont
+         * The text that was measured
+         *
          */
-        constructor(text, style, width, height, lines, lineWidths, lineHeight, maxLineWidth, fontProperties)
+        text: string;
+
+        /**
+         * The style that was measured
+         */
+        style: TextStyle;
+
+        /**
+         * The measured width of the text
+         */
+        width: number;
+
+        /**
+         * The measured height of the text
+         */
+        height: number;
+
+        /**
+         * An array of lines of the text broken by new lines and wrapping is specified in style
+         */
+        lines: string[];
+
+        /**
+         * An array of the line widths for each line matched to `lines`
+         */
+        lineWidths: number[];
+
+        /**
+         * The measured line height for this style
+         */
+        lineHeight: number;
+
+        /**
+         * The maximum line width for all measured lines
+         */
+        maxLineWidth: number;
+
+        /**
+         * The font properties object from TextMetrics.measureFont
+         */
+        fontProperties: Object;
+
+        /**
+         * Cached canvas element for measuring text
+         */
+        static _canvas = (() =>
         {
-            /**
-             * The text that was measured
-             *
-             * @member {string}
-             */
+            var c: HTMLCanvasElement;
+            try
+            {
+                // OffscreenCanvas2D measureText can be up to 40% faster.
+                c = <any>new OffscreenCanvas(0, 0);
+
+                c = c.getContext('2d') ? c : document.createElement('canvas');
+            }
+            catch (ex)
+            {
+                c = document.createElement('canvas');
+            }
+
+            c.width = c.height = 10;
+            return c;
+        })();
+
+        /**
+         * Cache for context to use.
+         */
+        static _context = <CanvasRenderingContext2D>TextMetrics._canvas.getContext('2d');
+
+        /**
+         * Cache of {@see PIXI.TextMetrics.FontMetrics} objects.
+         */
+        static _fonts: {};
+
+        /**
+         * String used for calculate font metrics.
+         * These characters are all tall to help calculate the height required for text.
+         */
+        static METRICS_STRING = '|ÉqÅ';
+
+        /**
+         * Baseline symbol for calculate font metrics.
+         */
+        static BASELINE_SYMBOL = 'M';
+
+        /**
+         * Baseline multiplier for calculate font metrics.
+         */
+        static BASELINE_MULTIPLIER = 1.4;
+
+        /**
+         * Cache of new line chars.
+         */
+        static _newlines = [
+            0x000A, // line feed
+            0x000D, // carriage return
+        ];
+
+        /**
+         * Cache of breaking spaces.
+         */
+        static _breakingSpaces = [
+            0x0009, // character tabulation
+            0x0020, // space
+            0x2000, // en quad
+            0x2001, // em quad
+            0x2002, // en space
+            0x2003, // em space
+            0x2004, // three-per-em space
+            0x2005, // four-per-em space
+            0x2006, // six-per-em space
+            0x2008, // punctuation space
+            0x2009, // thin space
+            0x200A, // hair space
+            0x205F, // medium mathematical space
+            0x3000, // ideographic space
+        ];
+
+        /**
+         * @param text - the text that was measured
+         * @param style - the style that was measured
+         * @param width - the measured width of the text
+         * @param height - the measured height of the text
+         * @param lines - an array of the lines of text broken by new lines and wrapping if specified in style
+         * @param lineWidths - an array of the line widths for each line matched to `lines`
+         * @param lineHeight - the measured line height for this style
+         * @param maxLineWidth - the maximum line width for all measured lines
+         * @param fontProperties - the font properties object from TextMetrics.measureFont
+         */
+        constructor(text: string, style: TextStyle, width: number, height: number, lines: string[], lineWidths: number[], lineHeight: number, maxLineWidth: number, fontProperties: Object)
+        {
             this.text = text;
-
-            /**
-             * The style that was measured
-             *
-             * @member {PIXI.TextStyle}
-             */
             this.style = style;
-
-            /**
-             * The measured width of the text
-             *
-             * @member {number}
-             */
             this.width = width;
-
-            /**
-             * The measured height of the text
-             *
-             * @member {number}
-             */
             this.height = height;
-
-            /**
-             * An array of lines of the text broken by new lines and wrapping is specified in style
-             *
-             * @member {string[]}
-             */
             this.lines = lines;
-
-            /**
-             * An array of the line widths for each line matched to `lines`
-             *
-             * @member {number[]}
-             */
             this.lineWidths = lineWidths;
-
-            /**
-             * The measured line height for this style
-             *
-             * @member {number}
-             */
             this.lineHeight = lineHeight;
-
-            /**
-             * The maximum line width for all measured lines
-             *
-             * @member {number}
-             */
             this.maxLineWidth = maxLineWidth;
-
-            /**
-             * The font properties object from TextMetrics.measureFont
-             *
-             * @member {PIXI.IFontMetrics}
-             */
             this.fontProperties = fontProperties;
         }
 
@@ -101,7 +170,7 @@ namespace text
          * @param {HTMLCanvasElement} [canvas] - optional specification of the canvas to use for measuring.
          * @return {PIXI.TextMetrics} measured width and height of the text.
          */
-        static measureText(text, style, wordWrap, canvas = TextMetrics._canvas)
+        static measureText(text: string, style: TextStyle, wordWrap: boolean, canvas = TextMetrics._canvas)
         {
             wordWrap = (wordWrap === undefined || wordWrap === null) ? style.wordWrap : wordWrap;
             const font = style.toFontString();
@@ -116,7 +185,10 @@ namespace text
             }
 
             const context = canvas.getContext('2d');
-
+            if (!context)
+            {
+                throw `获取 CanvasRenderingContext2D 失败！`;
+            }
             context.font = font;
 
             const outputText = wordWrap ? TextMetrics.wordWrap(text, style, canvas) : text;
@@ -362,11 +434,11 @@ namespace text
          * method
          *
          * @private
-         * @param  {string}   line        - The line of text to add
-         * @param  {boolean}  newLine     - Add new line character to end
-         * @return {string}   A formatted line
+         * @param  line        - The line of text to add
+         * @param  newLine     - Add new line character to end
+         * @return A formatted line
          */
-        static addLine(line, newLine = true)
+        static addLine(line: string, newLine = true)
         {
             line = TextMetrics.trimRight(line);
 
@@ -379,13 +451,13 @@ namespace text
          * Gets & sets the widths of calculated characters in a cache object
          *
          * @private
-         * @param  {string}                    key            The key
-         * @param  {number}                    letterSpacing  The letter spacing
-         * @param  {object}                    cache          The cache
-         * @param  {CanvasRenderingContext2D}  context        The canvas context
-         * @return {number}                    The from cache.
+         * @param key            The key
+         * @param letterSpacing  The letter spacing
+         * @param cache          The cache
+         * @param context        The canvas context
+         * @return The from cache.
          */
-        static getFromCache(key, letterSpacing, cache, context)
+        static getFromCache(key: string, letterSpacing: number, cache: { [key: string]: number }, context: CanvasRenderingContext2D)
         {
             let width = cache[key];
 
@@ -404,10 +476,10 @@ namespace text
          * Determines whether we should collapse breaking spaces
          *
          * @private
-         * @param  {string}   whiteSpace  The TextStyle property whiteSpace
-         * @return {boolean}  should collapse
+         * @param whiteSpace  The TextStyle property whiteSpace
+         * @return should collapse
          */
-        static collapseSpaces(whiteSpace)
+        static collapseSpaces(whiteSpace: string)
         {
             return (whiteSpace === 'normal' || whiteSpace === 'pre-line');
         }
@@ -416,10 +488,10 @@ namespace text
          * Determines whether we should collapse newLine chars
          *
          * @private
-         * @param  {string}   whiteSpace  The white space
-         * @return {boolean}  should collapse
+         * @param whiteSpace  The white space
+         * @return should collapse
          */
-        static collapseNewlines(whiteSpace)
+        static collapseNewlines(whiteSpace: string)
         {
             return (whiteSpace === 'normal');
         }
@@ -428,10 +500,10 @@ namespace text
          * trims breaking whitespaces from string
          *
          * @private
-         * @param  {string}  text  The text
-         * @return {string}  trimmed string
+         * @param text  The text
+         * @return trimmed string
          */
-        static trimRight(text)
+        static trimRight(text: string)
         {
             if (typeof text !== 'string')
             {
@@ -457,10 +529,10 @@ namespace text
          * Determines if char is a newline.
          *
          * @private
-         * @param  {string}  char  The character
-         * @return {boolean}  True if newline, False otherwise.
+         * @param char  The character
+         * @return True if newline, False otherwise.
          */
-        static isNewline(char)
+        static isNewline(char: string)
         {
             if (typeof char !== 'string')
             {
@@ -710,140 +782,4 @@ namespace text
             }
         }
     }
-
-    /**
-     * Internal return object for {@link PIXI.TextMetrics.measureFont `TextMetrics.measureFont`}.
-     *
-     * @typedef {object} FontMetrics
-     * @property {number} ascent - The ascent distance
-     * @property {number} descent - The descent distance
-     * @property {number} fontSize - Font size from ascent to descent
-     * @memberof PIXI.TextMetrics
-     * @private
-     */
-
-    const canvas = (() =>
-    {
-        try
-        {
-            // OffscreenCanvas2D measureText can be up to 40% faster.
-            const c = new OffscreenCanvas(0, 0);
-
-            return c.getContext('2d') ? c : document.createElement('canvas');
-        }
-        catch (ex)
-        {
-            return document.createElement('canvas');
-        }
-    })();
-
-    canvas.width = canvas.height = 10;
-
-    /**
-     * Cached canvas element for measuring text
-     *
-     * @memberof PIXI.TextMetrics
-     * @type {HTMLCanvasElement}
-     * @private
-     */
-    TextMetrics._canvas = canvas;
-
-    /**
-     * Cache for context to use.
-     *
-     * @memberof PIXI.TextMetrics
-     * @type {CanvasRenderingContext2D}
-     * @private
-     */
-    TextMetrics._context = canvas.getContext('2d');
-
-    /**
-     * Cache of {@see PIXI.TextMetrics.FontMetrics} objects.
-     *
-     * @memberof PIXI.TextMetrics
-     * @type {Object}
-     * @private
-     */
-    TextMetrics._fonts = {};
-
-    /**
-     * String used for calculate font metrics.
-     * These characters are all tall to help calculate the height required for text.
-     *
-     * @static
-     * @memberof PIXI.TextMetrics
-     * @name METRICS_STRING
-     * @type {string}
-     * @default |ÉqÅ
-     */
-    TextMetrics.METRICS_STRING = '|ÉqÅ';
-
-    /**
-     * Baseline symbol for calculate font metrics.
-     *
-     * @static
-     * @memberof PIXI.TextMetrics
-     * @name BASELINE_SYMBOL
-     * @type {string}
-     * @default M
-     */
-    TextMetrics.BASELINE_SYMBOL = 'M';
-
-    /**
-     * Baseline multiplier for calculate font metrics.
-     *
-     * @static
-     * @memberof PIXI.TextMetrics
-     * @name BASELINE_MULTIPLIER
-     * @type {number}
-     * @default 1.4
-     */
-    TextMetrics.BASELINE_MULTIPLIER = 1.4;
-
-    /**
-     * Cache of new line chars.
-     *
-     * @memberof PIXI.TextMetrics
-     * @type {number[]}
-     * @private
-     */
-    TextMetrics._newlines = [
-        0x000A, // line feed
-        0x000D, // carriage return
-    ];
-
-    /**
-     * Cache of breaking spaces.
-     *
-     * @memberof PIXI.TextMetrics
-     * @type {number[]}
-     * @private
-     */
-    TextMetrics._breakingSpaces = [
-        0x0009, // character tabulation
-        0x0020, // space
-        0x2000, // en quad
-        0x2001, // em quad
-        0x2002, // en space
-        0x2003, // em space
-        0x2004, // three-per-em space
-        0x2005, // four-per-em space
-        0x2006, // six-per-em space
-        0x2008, // punctuation space
-        0x2009, // thin space
-        0x200A, // hair space
-        0x205F, // medium mathematical space
-        0x3000, // ideographic space
-    ];
-
-    /**
-     * A number, or a string containing a number.
-     *
-     * @memberof PIXI
-     * @typedef IFontMetrics
-     * @property {number} ascent - Font ascent
-     * @property {number} descent - Font descent
-     * @property {number} fontSize - Font size
-     */
-
 }
