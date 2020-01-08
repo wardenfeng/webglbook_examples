@@ -789,7 +789,7 @@ namespace text
         /**
          * Font ascent
          */
-        ascent: string | number;
+        ascent: number;
         /**
          * Font descent
          */

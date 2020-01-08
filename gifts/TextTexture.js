@@ -157,14 +157,16 @@ function initTextures(gl) {
   ctx.font = '20px bold sans-serif';
   ctx.fillStyle = 'white';
   ctx.shadowColor = 'rgba(53, 60, 145, 1.0)';
-  text = 'matsuda & lea';
+  text = 'matsuda 🌷 lea';
   textWidth = ctx.measureText(text).width;
   ctx.fillText(text, (textCanvas.width-textWidth)/2, textCanvas.height/2+100);
+
+  var imagedata =  ctx.getImageData(0,0,textCanvas.height,textCanvas.height);
 
   // Load texture
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);  // Flip the image Y coordinate
   gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata);
 
   // Set texture parameters
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
