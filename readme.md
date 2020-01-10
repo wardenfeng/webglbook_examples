@@ -155,7 +155,7 @@
 1. `未实现` Canvas字体
 1. `未实现` 位图字体
 
-####  [![](images/threejs.png)](https://github.com/playcanvas/engine)
+####  [![](images/playcanvas.png)](https://github.com/playcanvas/engine)
 
 1. [text-element](https://github.com/playcanvas/engine/blob/master/src/framework/components/element/text-element.js)
 
@@ -175,3 +175,5 @@
 1. 位图字体 [font](https://github.com/playcanvas/engine/blob/master/src/framework/components/text/font.js)
     * 支持功能
         * 有向距离场
+            * 描边
+            * 阴影
