@@ -122,3 +122,18 @@
 
 
 #### [![](images/layabox.png)](https://github.com/layabox/LayaAir)
+
+1. Text Canvas字体 [Text](https://github.com/layabox/LayaAir/blob/master/src/layaAir/laya/display/Text.ts)
+    * 在 Text._renderText 中进行每行调用 Graphics.fillText 绘制
+    * 支持功能
+        * 多种字体
+        * 字体大小
+        * 粗体
+        * 斜体
+        * 颜色
+        * 对齐方式
+1. Text 位图字体 
+    * 在 Text._renderText 中根据 SpriteStyle 判断是否位图字体
+    * 支持功能
+        * 对齐方式
+
