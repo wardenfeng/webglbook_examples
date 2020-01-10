@@ -21,6 +21,7 @@
         * 文本渐变
         * 描边
         * 阴影
+        * 模糊
     * 劣势
         * 平台支持 CanvasRenderingContext2D
         * 使用多个canvas
@@ -123,7 +124,7 @@
 
 #### [![](images/layabox.png)](https://github.com/layabox/LayaAir)
 
-1. Text Canvas字体 [Text](https://github.com/layabox/LayaAir/blob/master/src/layaAir/laya/display/Text.ts)
+1. Canvas字体 [Text](https://github.com/layabox/LayaAir/blob/master/src/layaAir/laya/display/Text.ts)
     * 在 Text._renderText 中进行每行调用 Graphics.fillText 绘制
     * 支持功能
         * 多种字体
@@ -132,8 +133,45 @@
         * 斜体
         * 颜色
         * 对齐方式
-1. Text 位图字体 
+1. 位图字体  [Text](https://github.com/layabox/LayaAir/blob/master/src/layaAir/laya/display/Text.ts)
     * 在 Text._renderText 中根据 SpriteStyle 判断是否位图字体
     * 支持功能
         * 对齐方式
 
+####  [![](images/babylongjs.png)](https://github.com/BabylonJS/Babylon.js)
+
+1. Canvas字体 [textBlock](https://github.com/BabylonJS/Babylon.js/blob/master/gui/src/2D/controls/textBlock.ts)
+    * 在`305`行使用接口 CanvasRenderingContext2D.fillText
+    * 支持功能 Style
+        * 多种字体
+        * 字体大小
+        * 粗体
+        * 斜体
+        * 颜色
+1. `未实现` 位图字体
+
+####  [![](images/threejs.png)](https://github.com/mrdoob/three.js)
+
+1. `未实现` Canvas字体
+1. `未实现` 位图字体
+
+####  [![](images/threejs.png)](https://github.com/playcanvas/engine)
+
+1. [text-element](https://github.com/playcanvas/engine/blob/master/src/framework/components/element/text-element.js)
+
+    在_updateText函数中进行收集网格数据
+    * 支持功能
+        * 字体大小
+        * 颜色
+        * 描边
+        * 阴影
+
+1. Canvas字体 [CanvasFont](https://github.com/playcanvas/engine/blob/master/src/framework/components/text/canvas-font.js)
+    * 在`171`行使用接口 CanvasRenderingContext2D.fillText 绘制单个字符添加到字符集纹理中作为位图字体渲染。
+    * 支持功能
+        * 多种字体
+        * 字体大小
+        * 颜色
+1. 位图字体 [font](https://github.com/playcanvas/engine/blob/master/src/framework/components/text/font.js)
+    * 支持功能
+        * 有向距离场
