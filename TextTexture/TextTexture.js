@@ -146,6 +146,9 @@ function initTextures(gl)
 
   text.drawText(textCanvas, "matsuda 🌷 lea", textStyle);
 
+  textCanvas.width;
+  textCanvas.height;
+
   // Load texture
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);  // Flip the image Y coordinate
   gl.bindTexture(gl.TEXTURE_2D, texture);
