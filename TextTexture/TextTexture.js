@@ -20,14 +20,14 @@ var FSHADER_SOURCE =
   'void main() {\n' +
   '  gl_FragColor = texture2D(u_Sampler, v_TexCoord);\n' +
   '}\n';
-
+var gl
 function main()
 {
   // Retrieve <canvas> element
   var canvas = document.getElementById("webgl");
 
   // Get the rendering context for WebGL
-  var gl = getWebGLContext(canvas);
+  gl = getWebGLContext(canvas);
   if (!gl)
   {
     console.log('Failed to get the rendering context for WebGL');
@@ -49,19 +49,38 @@ function main()
   }
 
   // Set texture
-  if (!initTextures(gl))
+  if (!initTextures(gl, canvas))
   {
     console.log('Failed to intialize the texture.');
     return;
   }
 
-  draw(gl);
+  draw();
 
+}
+
+
+function draw()
+{
+
+  gl.clearColor(0, 0.0, 0.0, 1.0);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, pbuffer);
+  gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(a_Position);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, pbuffer1);
   gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(a_Position);
 
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+
+  requestAnimationFrame(draw);
 }
+var pbuffer;
 var pbuffer1;
 var a_Position;
 function initVertexBuffers(gl, canvas)
@@ -80,7 +99,7 @@ function initVertexBuffers(gl, canvas)
   ];
 
   // Create a buffer object
-  var pbuffer = gl.createBuffer();
+  pbuffer = gl.createBuffer();
   var tbuffer = gl.createBuffer();
   if (!pbuffer || !tbuffer)
   {
@@ -92,17 +111,19 @@ function initVertexBuffers(gl, canvas)
   gl.bindBuffer(gl.ARRAY_BUFFER, pbuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-  var offset = 2 / canvas.width;
+  var offset = 1 / canvas.width;
 
   pbuffer1 = gl.createBuffer();
   for (var i = 0; i < positions.length; i += 2)
   {
     positions[i] += offset;
+    positions[i + 1] -= 0.5;
   }
   gl.bindBuffer(gl.ARRAY_BUFFER, pbuffer1);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
   //
+  gl.bindBuffer(gl.ARRAY_BUFFER, pbuffer);
   a_Position = gl.getAttribLocation(gl.program, 'a_Position');
   if (a_Position < 0)
   {
@@ -127,7 +148,7 @@ function initVertexBuffers(gl, canvas)
   return true;
 }
 
-function initTextures(gl)
+function initTextures(gl, canvas)
 {
   // Get the storage location of u_Sampler
   var samplerLoc = gl.getUniformLocation(gl.program, 'u_Sampler');
@@ -154,23 +175,55 @@ function initTextures(gl)
   }
 
   // Set the size of <canvas>
-  textCanvas.width = 256;
-  textCanvas.height = 256;
+  textCanvas.width = canvas.width;
+  textCanvas.height = canvas.height;
 
-  var textStyle = new text.TextStyle();
-  textStyle.fontFamily = "bold sans-serif";
-  // textStyle.dropShadow = true;
-  textStyle.fontSize
+  // Get the rendering context for 2D
+  var ctx = textCanvas.getContext('2d');
+  if (!ctx)
+  {
+    console.log('Failed to get rendering context for 2d context');
+    return false;
+  }
 
-  text.drawText(textCanvas, "matsuda 🌷 lea", textStyle);
+  // Clear <canvas> with a white
+  // ctx.fillStyle = 'rgba(0, 0, 0, 0.0)';
+  ctx.fillRect(0, 0, textCanvas.width, textCanvas.height);
 
-  textCanvas.width;
-  textCanvas.height;
+  // // Set text properties
+  // ctx.font = '42px bold sans-serif';
+  // ctx.fillStyle = 'rgba(53, 60, 145, 1.0)';
+  ctx.textBaseline = 'top';
+
+  // ctx.shadowColor = 'rgba(19, 169, 184, 1.0)';
+  // ctx.shadowOffsetX = 3;
+  // ctx.shadowOffsetY = 3;
+  // ctx.shadowBlur = 4;
+
+  // Draw a text
+  var text = 'WebGL';
+  // var textWidth = ctx.measureText(text).width;
+  // ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2 - 10);
+  // text = 'Programming';
+  // textWidth = ctx.measureText(text).width;
+  // ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2 + 25);
+  // text = 'Guide';
+  // textWidth = ctx.measureText(text).width;
+  // ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2 + 60);
+  // ctx.font = '8px bold sans-serif';
+  ctx.font = '12px serif';
+  ctx.fillStyle = 'white';
+  // ctx.shadowColor = 'rgba(53, 60, 145, 1.0)';
+  // text = 'matsuda 🌷 lea';
+  text = 'Hello world';
+  textWidth = ctx.measureText(text).width;
+  ctx.fillText(text, 0.5, 0);
+  var imagedata = ctx.getImageData(0, 0, textCanvas.width, textCanvas.height);
 
   // Load texture
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);  // Flip the image Y coordinate
   gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imagedata);
 
   // Set texture parameters
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -182,11 +235,4 @@ function initTextures(gl)
   gl.uniform1i(samplerLoc, 0);
 
   return true;
-}
-
-function draw(gl)
-{
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);
-  gl.clear(gl.COLOR_BUFFER_BIT);
-  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 }
