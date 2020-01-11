@@ -42,7 +42,7 @@ function main()
   }
 
   // Set the vertex information
-  if (!initVertexBuffers(gl))
+  if (!initVertexBuffers(gl, canvas))
   {
     console.log('Failed to set the vertex information');
     return;
@@ -56,9 +56,15 @@ function main()
   }
 
   draw(gl);
-}
 
-function initVertexBuffers(gl)
+  gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(a_Position);
+
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+}
+var pbuffer1;
+var a_Position;
+function initVertexBuffers(gl, canvas)
 {
   var positions = [
     -1, 1,
@@ -85,7 +91,19 @@ function initVertexBuffers(gl)
   // Write vertex information to buffer object
   gl.bindBuffer(gl.ARRAY_BUFFER, pbuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-  var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+
+  var offset = 2 / canvas.width;
+
+  pbuffer1 = gl.createBuffer();
+  for (var i = 0; i < positions.length; i += 2)
+  {
+    positions[i] += offset;
+  }
+  gl.bindBuffer(gl.ARRAY_BUFFER, pbuffer1);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+  //
+  a_Position = gl.getAttribLocation(gl.program, 'a_Position');
   if (a_Position < 0)
   {
     console.log('Failed to get the storage location of a_Position');
