@@ -61,10 +61,10 @@ function main()
 function initVertexBuffers(gl)
 {
   var positions = [
-    -0.5, 0.5,
-    -0.5, -0.5,
-    0.5, 0.5,
-    0.5, -0.5
+    -1, 1,
+    -1, -1,
+    1, 1,
+    1, -1
   ];
   var texCoords = [
     0.0, 1.0,
@@ -139,50 +139,10 @@ function initTextures(gl)
   textCanvas.width = 256;
   textCanvas.height = 256;
 
-  // Get the rendering context for 2D
-  var ctx = textCanvas.getContext('2d');
-  if (!ctx)
-  {
-    console.log('Failed to get rendering context for 2d context');
-    return false;
-  }
-
-  // Clear <canvas> with a white
-  ctx.fillStyle = 'rgba(53, 60, 145, 1.0)';
-  ctx.fillRect(0, 0, textCanvas.width, textCanvas.height);
-
-  // Set text properties
-  ctx.font = '42px bold sans-serif';
-  ctx.fillStyle = 'rgba(53, 60, 145, 1.0)';
-  ctx.textBaseline = 'middle';
-
-  ctx.shadowColor = 'rgba(19, 169, 184, 1.0)';
-  ctx.shadowOffsetX = 3;
-  ctx.shadowOffsetY = 3;
-  ctx.shadowBlur = 4;
-
-  // // Draw a text
-  // var text = 'WebGL';
-  // var textWidth = ctx.measureText(text).width;
-  // ctx.fillText(text, (textCanvas.width-textWidth)/2, textCanvas.height/2 - 10);
-  // text = 'Programming';
-  // textWidth = ctx.measureText(text).width;
-  // ctx.fillText(text, (textCanvas.width-textWidth)/2, textCanvas.height/2 + 25);
-  // text = 'Guide';
-  // textWidth = ctx.measureText(text).width;
-  // ctx.fillText(text, (textCanvas.width-textWidth)/2, textCanvas.height/2 + 60);
-  // ctx.font = '20px bold sans-serif';
-  // ctx.fillStyle = 'white';
-  // ctx.shadowColor = 'rgba(53, 60, 145, 1.0)';
-  // text = 'matsuda 🌷 lea';
-  // textWidth = ctx.measureText(text).width;
-  // ctx.fillText(text, (textCanvas.width-textWidth)/2, textCanvas.height/2+100);
-
-  // var imagedata =  ctx.getImageData(0,0,textCanvas.height,textCanvas.height);
-
   var textStyle = new text.TextStyle();
   textStyle.fontFamily = "bold sans-serif";
-  textStyle.dropShadow = true;
+  // textStyle.dropShadow = true;
+  textStyle.fontSize
 
   text.drawText(textCanvas, "matsuda 🌷 lea", textStyle);
 
